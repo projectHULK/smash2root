@@ -1,4 +1,6 @@
-﻿#!/bin/bash
+#!/bin/bash
+
+
 #------------------> Color Code:
 RED="\033[01;31m"
 BLUE="\033[36m"
