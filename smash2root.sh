@@ -727,7 +727,7 @@ echo -e "\n${BLUE}╔═════{ Cleartext Credentials in Memory:${XX}"
             printf "%b" "$RESULTS" | sort -u
             unset RESULTS
     else
-        echo "Requires administrator"
+        echo -e "${RED}    ══{ Requires administrator${XX}"
     fi
 echo -e "\n"
 echo -e "${RED} \t\t╔════════════════════════════════════════════════════════════════════════════════════════════════════════╗${XX}"
