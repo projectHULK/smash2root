@@ -461,6 +461,8 @@ fi
 echo -e "\n${BLUE}╔═════{ Configuration files that might contain sensitive information:${XX}"
     grep "pass\|cred\|hash" /etc/*.conf 2>/dev/null --color=always
 echo -e "\n${BLUE}╔═════{ Cleartext Credentials in Memory:${XX}"
+echo -e "\n${BLUE}╔═════{ Supported by mimipenguin:${XX}"
+echo -e "\n${BLUE}    ══{ Download link: https://github.com/huntergregal/mimipenguin ${XX}"
     root () { [ "$(id -u)" -eq 0 ]; }
     if root;
         then
@@ -737,7 +739,7 @@ echo -e "\n"
 echo -e "\n${BLUE}╔═════{ System Name:${XX}"
     uname -a 2>/dev/null
 echo -e "\n${BLUE}╔═════{ Kernal Exploit supported by linux-exploit-suggester:${XX}"
-echo -e "\n${BLUE}    ══{ Download link: git clone https://github.com/mzet-/linux-exploit-suggester.git ${XX}"
+echo -e "\n${BLUE}    ══{ Download link: https://github.com/mzet-/linux-exploit-suggester.git ${XX}"
     UNAME_A=""
     KERNEL=""
     OS=""
