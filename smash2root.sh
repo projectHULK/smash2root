@@ -7,7 +7,7 @@ BLUE="\033[36m"
 GREEN="\033[01;32m"
 GRAY="\e[0;37m"
 YELLOW='\e[1;93m'
-XX="\033[0m" #--- COLSE COLOR
+XX="\033[0m" #--- Close COLOR
 #------------------> Clear Screen:
 echo -e "\n\n${RED}╚════{ Clearing Terminal${XX}"
 sleep 0.5
