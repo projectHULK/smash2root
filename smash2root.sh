@@ -324,7 +324,7 @@ echo -e "\n${BLUE}    ══{ Is Sudoers file Writable?${XX}"
             then
                 echo -e "${GREEN}   Permission is Granted${XX}"
             else
-                echo -e "${RED} Permission Denied${XX}"
+                echo -e "${RED}	Permission Denied${XX}"
             fi
 echo -e "\n${BLUE}    ══{ Reading Sudoers File:${XX}"
     if [ -r /etc/sudoers ];
@@ -727,7 +727,7 @@ echo -e "\n${BLUE}╔═════{ Cleartext Credentials in Memory:${XX}"
             printf "%b" "$RESULTS" | sort -u
             unset RESULTS
     else
-        echo -e "${RED}    ══{ Requires administrator${XX}"
+        echo -e "${RED}        Requires Root${XX}"
     fi
 echo -e "\n"
 echo -e "${RED} \t\t╔════════════════════════════════════════════════════════════════════════════════════════════════════════╗${XX}"
@@ -2996,7 +2996,6 @@ EOF
     fi
 
     echo
-    echo -e "${BLUE}    ══{ Searching among:${XX}"
     echo
     echo "${#EXPLOITS[@]} kernel space exploits"
     echo "${#EXPLOITS_USERSPACE[@]} user space exploits"
