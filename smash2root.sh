@@ -77,7 +77,8 @@ echo -e "\n${BLUE}╔═════{ Current Privilege is?${XX}"
         then
             echo -e "${GREEN}        You are Root!${XX}"
             sleep 2
-            read -p "[+] Continue Enumeration? y/n " input
+            echo -e "\n"
+            read -p "[+] Continue Enumeration (y/n)? " input
             if [[ $input == "n" ]]; then
                 exit 1
             fi
