@@ -75,8 +75,12 @@ echo -e "\n${BLUE}╔═════{ Current Privilege is?${XX}"
     root () { [ "$(id -u)" -eq 0 ]; }
     if root;
         then
-            echo -e "     ${GREEN}You are Root!${XX}"
+            echo -e "${GREEN}        You are Root!${XX}"
             sleep 2
+            read -p "[+] Continue Enumeration? y/n " input
+            if [[ $input == "n" ]]; then
+                exit 1
+            fi
         else
             echo -e "\tNormal User, too bad :(... " >&2
             echo -e "\tTry hard to escalate :D "
@@ -462,10 +466,11 @@ echo -e "\n${BLUE}╔═════{ Configuration files that might contain sen
     grep "pass\|cred\|hash" /etc/*.conf 2>/dev/null --color=always
 echo -e "\n${BLUE}╔═════{ Cleartext Credentials in Memory:${XX}"
 echo -e "${BLUE}    ══{ Supported by mimipenguin:${XX}"
-echo -e "${BLUE}    ══{ Download link: https://github.com/huntergregal/mimipenguin ${XX}"
+echo -e "${BLUE}    ══{ Download from: https://github.com/huntergregal/mimipenguin ${XX}"
     root () { [ "$(id -u)" -eq 0 ]; }
     if root;
         then
+        echo -e "${GREEN}        On Progress ....${XX}"
             #Store results to cleanup later
             export RESULTS=""
             # check if a command exists in $PATH
@@ -703,12 +708,11 @@ echo -e "${BLUE}    ══{ Download link: https://github.com/huntergregal/mimip
                 fi
             fi
             #Output results to STDOUT
-            printf "MimiPenguin Results:\n"
+            printf "        MimiPenguin Results:\n"
             printf "%b" "$RESULTS" | sort -u
             unset RESULTS
     else
-        echo -e "\n"
-        echo -e "${RED}    ══{ Requires Root${XX}"
+        echo -e "${RED}	Permission Denied${XX}"
     fi
 echo -e "\n"
 echo -e "${RED} \t\t╔════════════════════════════════════════════════════════════════════════════════════════════════════════╗${XX}"
@@ -717,8 +721,9 @@ echo -e "${RED} \t\t╚═══════════════════
 echo -e "\n"
 echo -e "\n${BLUE}╔═════{ System Name:${XX}"
     uname -a 2>/dev/null
-echo -e "\n${BLUE}╔═════{ Kernal Exploit supported by linux-exploit-suggester:${XX}"
-echo -e "${BLUE}    ══{ Download link: https://github.com/mzet-/linux-exploit-suggester.git ${XX}"
+echo -e "\n${BLUE}╔═════{ Kernal Exploit:${XX}"
+echo -e "${BLUE}    ══{ Supported by linux-exploit-suggester:${XX}"
+echo -e "${BLUE}    ══{ Download from: https://github.com/mzet-/linux-exploit-suggester.git ${XX}"
     UNAME_A=""
     KERNEL=""
     OS=""
