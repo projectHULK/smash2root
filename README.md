@@ -1,6 +1,6 @@
 This script has been designed to support SOC, Red Team & CTF players in finding some basic ways to privilege escalation. The script should be used in safe environment. The author IS NOT responsible for any kind of misuse of it.
 
-Message: If you find new ways in privilega escalation and is not listing in our script, please feel free to share your experience.
+Message: If you find new ways in privilega escalation and is not listed in our script, please feel free to share your experience.
 
 <img width="1669" alt="Screen Shot 2021-12-26 at 11 39 43 PM" src="https://user-images.githubusercontent.com/65414049/147418603-e4fe4571-09aa-4a94-ae4a-fb86cf279363.png">
 <img width="1667" alt="Screen Shot 2021-12-26 at 11 40 17 PM" src="https://user-images.githubusercontent.com/65414049/147418607-858490ba-1fcc-4ad5-976e-df216ba9dbc9.png">
