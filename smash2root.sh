@@ -379,6 +379,43 @@ echo -e "\n${BLUE}╔═════{ User Bash History:${XX}"
         echo -e  "\t║Bash and other scripting languages, along with various services often store previous commands run in the system,    ║"
         echo -e  '\t║which could contain clear-text or encoded passwords if they are hard-coded in the command itself                    ║'
         echo -e  "\t╚════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╝"
+echo -e "\n${BLUE}╔═════{ User Nano History:${XX}"
+    if [ -f /home/$USER/.nano_history ]; 
+        then
+            echo -e "\n${BLUE}    ══{ Reading User Nano History:${XX}"
+            cat /home/$USER/.nano_history
+        else
+            echo -e "  ${RED}File does not exist${XX}"
+    fi
+echo -e "\n${BLUE}╔═════{ User FTP History:${XX}"
+    if [ -f /home/$USER/.atftp_history ]; 
+        then
+            echo -e "\n${BLUE}    ══{ Reading User FTP History:${XX}"
+            cat /home/$USER/.atftp_history
+        else
+            echo -e "  ${RED}File does not exist${XX}"
+    fi
+echo -e "\n${BLUE}╔═════{ User MYSQL History:${XX}"
+    if [ -f /home/$USER/.mysql_history ]; 
+        then
+            echo -e "\n${BLUE}    ══{ Reading User MYSQL History:${XX}"
+            cat /home/$USER/.mysql_history
+        else
+            echo -e "  ${RED}File does not exist${XX}"
+    fi
+echo -e "\n${BLUE}╔═════{ User PHP History:${XX}"
+    if [ -f /home/$USER/.php_history ]; 
+        then
+            echo -e "\n${BLUE}    ══{ Reading User PHP History:${XX}"
+            cat /home/$USER/.php_history
+        else
+            echo -e "  ${RED}File does not exist${XX}"
+    fi
+
+
+
+
+
 echo -e "\n${BLUE}╔═════{ /etc/security/opasswd file permission:${XX}"
     ls -la /etc/security/opasswd
 echo -e "\n${BLUE}╔═════{ Reading old passwords in /etc/security/opasswd:${XX}"
@@ -3250,6 +3287,8 @@ echo -e "\n${BLUE}╔═════{ List of running services:${XX}"
     service --status-all
 echo -e "\n${BLUE}╔═════{ File-systems mounted:${XX}"
     df -h 2>/dev/null
+echo -e "\n${BLUE}╔═════{ Unmounted file-systems:${XX}"
+    cat /etc/fstab
 echo -e "\n${BLUE}╔═════{ ASLR Settings:${XX}"
     cat /proc/sys/kernel/randomize_va_space
         echo -e "\t╔══════════════════════════════════════════════════════════════════════════════════════════════╗"
@@ -3381,6 +3420,8 @@ echo -e "\n${BLUE}╔═════{ World writable directories:${XX}"
     find / -type d \( -perm -g+w -o -perm -o+w \) -exec ls -lad --color=always {} \; 2>/dev/null
 echo -e "\n${BLUE}╔═════{ World executable folders:${XX}"
     find / -perm o=x -type d 2>/dev/null
+echo -e "\n${BLUE}╔═════{ World Writable files:${XX}"
+    find / -xdev -type d \( -perm -0002 -a ! -perm -1000 \) 2>/dev/null
 echo -e "\n${BLUE}╔═════{ Writable config files:${XX}"
     find /etc/ -writable -type f 2>/dev/null | xargs ls -la --color=always 2>/dev/null
 echo -e "\n${BLUE}╔═════{ How Files Can Be Upload/Download:${XX}"
@@ -3532,7 +3573,7 @@ echo -e "\n${BLUE}╔═════{ Open Ports:${XX}"
         echo -e "\t║to it locally. If nothing is displayed run the command manually: netstat -tulpna                                      ║"
         echo -e "\t╚══════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╝"
 echo -e "\n${BLUE}╔═════{ Network Route & Neighbours:${XX}"
-    route; ip n
+    /sbin/route -nee
         echo -e "\t╔══════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╗"
         echo -e "\t║Want to know how many hops are between our compromised machine, and other network segments, do the following manually:║"
         echo -e "\t║    traceroute –n <ip address>                                                                                        ║"
@@ -3766,13 +3807,42 @@ echo -e "\n${BLUE}╔═════{ MySQL:${XX}"
             echo -e "${RED}	File does not exist${XX}"
     fi
 echo -e "\n${BLUE}╔═════{ Log File:${XX}"
-    ls -la /var/log 2>/dev/null --color=always
+    find / -iname *log -type f 2>/dev/null | xargs ls -la | grep -v "/proc/\|/usr/"
         echo -e "\t╔════════════════════════════════════════════════════════════════════════════════════════════╗"
         echo -e "\t║Do the following and see if there is any password:-                                         ║"
         echo -e "\t║    grep -r passw . 2>/dev/null                                                             ║"
         echo -e "\t╚════════════════════════════════════════════════════════════════════════════════════════════╝"
 echo -e "\n${BLUE}╔═════{ /var/www/ files:${XX}"
     ls -la /var/www --color=always 2>/dev/null
+echo -e "\n${BLUE}╔═════{ Any settings/files (hidden) on website? Any settings file with database information?${XX}"
+echo -e "\n${BLUE}    ══{ /var/www/:${XX}"
+    if [ -f /var/www/ ]; 
+        then
+		ls -alhR /var/www/ 2>/dev/null
+        else
+            echo -e "  ${RED}File does not exist${XX}"
+    fi
+echo -e "\n${BLUE}    ══{ htdocs:${XX}"
+    if [ -f /srv/www/htdocs/ ]; 
+        then
+		ls -alhR /srv/www/htdocs/ 2>/dev/null
+        else
+            echo -e "  ${RED}File does not exist${XX}"
+    fi
+echo -e "\n${BLUE}    ══{ apache22/data:${XX}"
+    if [ -f /usr/local/www/apache22/data/ ]; 
+        then
+		ls -alhR /usr/local/www/apache22/data/ 2>/dev/null
+        else
+            echo -e "  ${RED}File does not exist${XX}"
+    fi
+echo -e "\n${BLUE}    ══{ /opt/lampp/htdocs/:${XX}"
+    if [ -f /opt/lampp/htdocs/ ]; 
+        then
+		ls -alhR /opt/lampp/htdocs/ 2>/dev/null
+        else
+            echo -e "  ${RED}File does not exist${XX}"
+    fi
 echo -e "\n${BLUE}╔═════{ Spool File:${XX}"
     ls -la /var/spool 2>/dev/null --color=always
         echo -e "\t╔════════════════════════════════════════════════════════════════════════════════════════════╗"
