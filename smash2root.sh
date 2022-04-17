@@ -3631,6 +3631,8 @@ echo -e "\n${BLUE}╔═════{ ssh_config File:${XX}"
             ls -la /etc/ssh/ssh_config --color=always
             echo -e "\n${BLUE}    ══{ Reading ssh_config File:${XX}"
                 cat /etc/ssh/ssh_config
+            echo -e "\n${BLUE}    ══{ Max Sessions Allowed 'defaults is 10':${XX}"
+                cat /etc/ssh/ssh_config | grep MaxSession
             echo -e "\n${BLUE}    ══{ Is HashKnownHosts Enable:${XX}"
                 cat /etc/ssh/ssh_config | grep HashKnownHosts
                 echo -e "\t╔════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╗"
@@ -3680,11 +3682,13 @@ echo -e "\n${BLUE}╔═════{ hosts.allow:${XX}"
             echo -e "${RED}	File does not exist${XX}"
     fi
 echo -e "\n${BLUE}╔═════{ Any active SSH session:${XX}"
-    ps aux | grep sshd
+    ps aux | grep ssh
         echo -e "\t╔════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╗"
         echo -e "\t║If any session is found, the session can be hijacked. Read more about SSH session hijacking:                        ║"
         echo -e "\t║    https://xorl.wordpress.com/2018/02/04/ssh-hijacking-for-lateral-movement/                                       ║"
         echo -e "\t╚════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╝"
+echo -e "\n${BLUE}╔═════{ Active SSH Session ID:${XX}"
+    pstree -p $USER | grep ssh
 echo -e "\n${BLUE}╔═════{ .key files:${XX}"
     find / -name *.key -type f 2>/dev/null
         echo -e "\t╔════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╗"
