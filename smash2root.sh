@@ -3322,6 +3322,29 @@ echo -e "\n${BLUE}╔═════{ Total number of installed packages:${XX}"
         echo -e "\t║You can display all installed packages by doing:                                                                    ║"
         echo -e "\t║    apt list --installed                                                                                            ║"
         echo -e "\t╚════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╝"
+echo -e "\n${BLUE}╔═════{ Is Ansible Installed on the system:${XX}"
+    if [ -f /etc/ansible ]; 
+        then
+                echo -e "\t╔════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╗"
+                echo -e "\t║Ansible is an infrastructure configuration engine that enables IT personnel to dynamically and automatically        ║"
+                echo -e "\t║configure IT infrastructure and computing resources. It works through a “push” model where the Ansible controller   ║"
+                echo -e "\t║connects to registered “nodes” and runs “modules” on them.                                                          ║"
+                echo -e "\t╚════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╝"
+            echo -e "\n${BLUE}    ══{ File List:${XX}"
+                ls -la /etc/ansible/ 2>/dev/null
+            echo -e "\n${BLUE}    ══{ Host File:${XX}"
+                cat /etc/ansible/hosts 2>/dev/null
+            echo -e "\n${BLUE}    ══{ Related Usernames:${XX}"
+                cat /etc/passwd | grep ansible 2>/dev/null
+            echo -e "\n${BLUE}    ══{ Ansible-related log messages:${XX}"
+                cat /var/log/syslog | grep ansible 2>/dev/null
+        else
+            echo -e "  ${RED}File does not exist${XX}"
+    fi
+        echo -e "\t╔════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╗"
+        echo -e "\t║You can display all installed packages by doing:                                                                    ║"
+        echo -e "\t║    apt list --installed                                                                                            ║"
+        echo -e "\t╚════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╝"
 echo -e "\n\n${RED}\t\tEnumeration on progress ╔══════════════════.................(20%).....................................${XX}\n"
 echo -e "${RED} \t\t╔════════════════════════════════════════════════════════════════════════════════════════════════════════╗${XX}"
 echo -e "${RED} \t\t ══════════════════════════════════════════[ System Date/Time ]══════════════════════════════════════════ ${XX}"
