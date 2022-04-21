@@ -364,8 +364,9 @@ echo -e "\n${BLUE}╔═════{ Find 'Pass, Hash, Cred' as a file name:${X
         echo -e  "\t╔════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╗"
         echo -e  "\t║Excluded: /usr/ | /var/ | /opt/ | /sys/                                                                             ║"
         echo -e  "\t╚════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╝"
-echo -e "\n${BLUE}╔═════{ User Bash History:${XX}"
+echo -e "\n${BLUE}╔═════{ Bash History Files:${XX}"
     find / -iname *_history -xdev 2>/dev/null | xargs ls -ld
+echo -e "\n${BLUE}╔═════{ Curent User Bash History:${XX}"
         if [ -f /home/$USER/.bash_history ]; 
             then
                 echo -e "\n${BLUE}    ══{ Reading last 100 User Bash History:${XX}"
@@ -374,7 +375,7 @@ echo -e "\n${BLUE}╔═════{ User Bash History:${XX}"
                     echo -e  "\t║If you want to read the whole file do: cat /home/$USER/.bash_history                                                ║"
                     echo -e  "\t╚════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╝"
             else
-                echo -e "  ${RED}File does not exist${XX}"
+                echo -e "${RED}	File does not exist${XX}"
         fi
         echo -e  "\t╔════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╗"
         echo -e  "\t║Bash and other scripting languages, along with various services often store previous commands run in the system,    ║"
@@ -386,7 +387,7 @@ echo -e "\n${BLUE}╔═════{ User Nano History:${XX}"
             echo -e "\n${BLUE}    ══{ Reading User Nano History:${XX}"
             cat /home/$USER/.nano_history
         else
-            echo -e "  ${RED}File does not exist${XX}"
+            echo -e "${RED}	File does not exist${XX}"
     fi
 echo -e "\n${BLUE}╔═════{ User FTP History:${XX}"
     if [ -f /home/$USER/.atftp_history ]; 
@@ -394,7 +395,7 @@ echo -e "\n${BLUE}╔═════{ User FTP History:${XX}"
             echo -e "\n${BLUE}    ══{ Reading User FTP History:${XX}"
             cat /home/$USER/.atftp_history
         else
-            echo -e "  ${RED}File does not exist${XX}"
+            echo -e "${RED}	File does not exist${XX}"
     fi
 echo -e "\n${BLUE}╔═════{ User MYSQL History:${XX}"
     if [ -f /home/$USER/.mysql_history ]; 
@@ -402,7 +403,7 @@ echo -e "\n${BLUE}╔═════{ User MYSQL History:${XX}"
             echo -e "\n${BLUE}    ══{ Reading User MYSQL History:${XX}"
             cat /home/$USER/.mysql_history
         else
-            echo -e "  ${RED}File does not exist${XX}"
+            echo -e "${RED}	File does not exist${XX}"
     fi
 echo -e "\n${BLUE}╔═════{ User PHP History:${XX}"
     if [ -f /home/$USER/.php_history ]; 
@@ -410,7 +411,7 @@ echo -e "\n${BLUE}╔═════{ User PHP History:${XX}"
             echo -e "\n${BLUE}    ══{ Reading User PHP History:${XX}"
             cat /home/$USER/.php_history
         else
-            echo -e "  ${RED}File does not exist${XX}"
+            echo -e "${RED}	File does not exist${XX}"
     fi
 echo -e "\n${BLUE}╔═════{ /etc/security/opasswd file permission:${XX}"
     ls -la /etc/security/opasswd
@@ -3357,7 +3358,28 @@ echo -e "\n${BLUE}╔═════{ Is Ansible Installed on the system:${XX}"
                 echo -e "\t║    hashcat ansible.txt --force --hash-type=16900 /usr/share/wordlists/rockyou.txt                                  ║"
                 echo -e "\t╚════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╝"
         else
-            echo -e "  ${RED}Ansible does not exist${XX}"
+            echo -e "${RED}	Ansible does not exist${XX}"
+    fi
+echo -e "\n${BLUE}╔═════{ Is Artifactory Installed on the system:${XX}"
+    if [ -d /opt/jfrog/ ]; 
+        then
+                echo -e "\t╔════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╗"
+                echo -e "\t║Artifactory  is a “binary repository manager” that stores software packages and other binaries.                     ║"
+                echo -e "\t║    https://jfrog.com/artifactory/                                                                                  ║"
+                echo -e "\t╚════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╝"
+            echo -e "\n${BLUE}    ══{ Artifactory Files:${XX}"
+                ls -la /opt/jfrog/ 2>/dev/null
+            echo -e "\n${BLUE}    ══{ Artifactory Database Backups:${XX}"
+                ls -la /opt/jfrog/artifactory/var/backup/access 2>/dev/null
+            echo -e "\n${BLUE}    ══{ Artifactory Database Backups Passwords:${XX}"
+                cat /opt/jfrog/artifactory/var/backup/access/*.json | grep password 2>/dev/null
+                echo -e "\t╔════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╗"
+                echo -e "\t║Past the hash in artifactory.txt                                                                                    ║"
+                echo -e "\t║    john artifactory.txt --wordlist=/usr/share/wordlists/rockyou.txt                                                ║"
+                echo -e "\t║Use the username and password to login to the web portal on poer 8082                                               ║"
+                echo -e "\t╚════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╝"
+        else
+                echo -e "${RED}	Artifactory does not exist${XX}"
     fi
     echo -e "\n${BLUE}╔═════{ Others:${XX}"
         echo -e "\t╔════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╗"
@@ -3535,8 +3557,10 @@ echo -e "\n${BLUE}╔═════{ Is tmux Running as root:${XX}"
         echo -e "\t╚════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╝"
 echo -e "\n${BLUE}╔═════{ Node.js Running on the system:${XX}"
     ps aux | grep --color=always .js 2>/dev/null
+echo -e "\n${BLUE}╔═════{ Is Artifactory running on the system:${XX}"
+    ps aux | grep artifactory 2>/dev/null
 echo -e "\n${BLUE}╔═════{ Is VNC running on the system:${XX}"
-    ps -auwwx | grep vnc
+    ps -auwwx | grep vnc 2>/dev/null
         echo -e "\t╔════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╗"
         echo -e "\t║:1 - display number 1                                                                                               ║"
         echo -e "\t║-rfbauth {PATH} - specifies the file containing the password used to auth viewers                                   ║"
@@ -3550,7 +3574,7 @@ echo -e "\n${BLUE}╔═════{ Shared object libraries (GOOD FOR BACKDOOR
             then
                 ldd /usr/local/bin/program 2>/dev/null
             else
-                echo -e "  ${RED}File does not exist${XX}"
+                echo -e "${RED}	File does not exist${XX}"
     fi
 echo -e "\n${BLUE}╔═════{ Is the executable compiled with RPATH or RUNPATH (GOOD FOR BACKDOOR):${XX}"
     objdump -x /usr/local/bin/program 2>/dev/null | grep -i "RPATH\|RUNPATH"
@@ -3753,7 +3777,7 @@ echo -e "\n${BLUE}╔═════{ known_hosts:${XX}"
                 echo -e "\t║so entries in the known_hosts file are hashed. Reading the file does not give us any useful information.            ║"
                 echo -e "\t╚════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╝"
         else
-            echo -e "  ${RED}File does not exist${XX}"
+            echo -e "${RED}	File does not exist${XX}"
     fi
 echo -e "\n${BLUE}╔═════{ SSH Persistence:${XX}"
         echo -e "\t╔════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╗"
@@ -3904,28 +3928,28 @@ echo -e "\n${BLUE}    ══{ /var/www/:${XX}"
         then
 		ls -alhR /var/www/ 2>/dev/null
         else
-            echo -e "  ${RED}File does not exist${XX}"
+            echo -e "${RED}	File does not exist${XX}"
     fi
 echo -e "\n${BLUE}    ══{ htdocs:${XX}"
     if [ -f /srv/www/htdocs/ ]; 
         then
 		ls -alhR /srv/www/htdocs/ 2>/dev/null
         else
-            echo -e "  ${RED}File does not exist${XX}"
+            echo -e "${RED}	File does not exist${XX}"
     fi
 echo -e "\n${BLUE}    ══{ apache22/data:${XX}"
     if [ -f /usr/local/www/apache22/data/ ]; 
         then
 		ls -alhR /usr/local/www/apache22/data/ 2>/dev/null
         else
-            echo -e "  ${RED}File does not exist${XX}"
+            echo -e "${RED}	File does not exist${XX}"
     fi
 echo -e "\n${BLUE}    ══{ /opt/lampp/htdocs/:${XX}"
     if [ -f /opt/lampp/htdocs/ ]; 
         then
 		ls -alhR /opt/lampp/htdocs/ 2>/dev/null
         else
-            echo -e "  ${RED}File does not exist${XX}"
+            echo -e "${RED}	File does not exist${XX}"
     fi
 echo -e "\n${BLUE}╔═════{ Spool File:${XX}"
     ls -la /var/spool 2>/dev/null --color=always
@@ -4039,10 +4063,15 @@ echo -e "\n${BLUE}╔═════{ Print IPSEC VPN Keys (requires root):${XX}
 echo -e "\n${BLUE}╔═════{ OpenLDAP Configuration:${XX}"
     cat /etc/openldap/ldap.conf 2>/dev/null
 echo -e "\n${BLUE}╔═════{ Current user trash files:${XX}"
-    ls -la ~/.local/share/Trash/ 2>/dev/null
-        echo -e "\t╔════════════════════════════════════════════════════════════════════════════════════════════╗"
-        echo -e "\t║Have a look at the trash files and see if you can find any useful information.              ║"
-        echo -e "\t╚════════════════════════════════════════════════════════════════════════════════════════════╝"
+    if [ -d ~/.local/share/Trash/ ]; 
+        then
+		    ls -la ~/.local/share/Trash/ 2>/dev/null
+                echo -e "\t╔════════════════════════════════════════════════════════════════════════════════════════════╗"
+                echo -e "\t║Have a look at the trash files and see if you can find any useful information.              ║"
+                echo -e "\t╚════════════════════════════════════════════════════════════════════════════════════════════╝"
+        else
+            echo -e "${RED}	Trash is Empty${XX}"
+    fi
 echo -e "\n${BLUE}╔═════{ Wireshark files:${XX}"
     find / -name *.pcapng -o -name *.libpcap -type f 2>/dev/null | grep -v "/usr/"
 echo -e "\n${BLUE}╔═════{ RDP Profiles:${XX}"
