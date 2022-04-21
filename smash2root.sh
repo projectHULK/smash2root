@@ -3321,13 +3321,15 @@ echo -e "\n${BLUE}╔═════{ Total number of installed packages:${XX}"
         echo -e "\t║    apt list --installed                                                                                            ║"
         echo -e "\t╚════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╝"
 echo -e "\n${BLUE}╔═════{ Is Ansible Installed on the system:${XX}"
-    if [ -f /etc/ansible/hosts ]; 
+    if [ -d /etc/ansible/ ]; 
         then
                 echo -e "\t╔════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╗"
                 echo -e "\t║Ansible is an infrastructure configuration engine that enables IT personnel to dynamically and automatically        ║"
                 echo -e "\t║configure IT infrastructure and computing resources. It works through a “push” model where the Ansible controller   ║"
                 echo -e "\t║connects to registered “nodes” and runs “modules” on them.                                                          ║"
                 echo -e "\t╚════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╝"
+            echo -e "\n${BLUE}    ══{ Version:${XX}"
+                ansible --version | grep "version\|config\|configured\|ansible\|executable" 2>/dev/null
             echo -e "\n${BLUE}    ══{ File List:${XX}"
                 ls -la /etc/ansible/ 2>/dev/null
             echo -e "\n${BLUE}    ══{ Host File:${XX}"
@@ -3335,11 +3337,29 @@ echo -e "\n${BLUE}╔═════{ Is Ansible Installed on the system:${XX}"
             echo -e "\n${BLUE}    ══{ Related Usernames:${XX}"
                 cat /etc/passwd | grep ansible 2>/dev/null
             echo -e "\n${BLUE}    ══{ Ansible-related log messages:${XX}"
-                cat /var/log/syslog | grep ansible 2>/dev/null
+                cat /var/log/syslog | grep "ansible\|password" 2>/dev/null
+            echo -e "\n${BLUE}    ══{ Ansible Playbooks files:${XX}"
+            if [ -d "/opt/playbooks/" ]
+                then
+                    ls -la /opt/playbooks/ 2>/dev/null
+                else
+                    echo -e "  ${RED}Playbooks does not exist${XX}"
+            fi
+            echo -e "\n${BLUE}    ══{ Ansible .yaml files:${XX}"
+                find / -name *.yaml -type f 2>/dev/null
+            echo -e "\n${BLUE}    ══{ Ansible .yaml files:${XX}"
+                find / -name *.yml -type f 2>/dev/null
+            echo -e "\n${BLUE}    ══{ Crack Ansible Hash:${XX}"
+                echo -e "\t╔════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╗"
+                echo -e "\t║Put the hash in ansible.yml file                                                                                    ║"
+                echo -e "\t║    python3 /usr/share/john/ansible2john.py ./ansible.yml                                                           ║"
+                echo -e "\t║Copy and Past the text to ansible.txt file                                                                          ║"
+                echo -e "\t║    hashcat ansible.txt --force --hash-type=16900 /usr/share/wordlists/rockyou.txt                                  ║"
+                echo -e "\t╚════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╝"
         else
-            echo -e "  ${RED}File does not exist${XX}"
+            echo -e "  ${RED}Ansible does not exist${XX}"
     fi
-        echo -e "\n"
+    echo -e "\n${BLUE}╔═════{ Others:${XX}"
         echo -e "\t╔════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╗"
         echo -e "\t║You can display all installed packages by doing:                                                                    ║"
         echo -e "\t║    apt list --installed                                                                                            ║"
