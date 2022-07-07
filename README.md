@@ -1,4 +1,4 @@
-This script has been designed to support SOC, Red Team & CTF players in finding some basic ways to privilege escalation. The script should be used in safe environment. The author IS NOT responsible for any kind of misuse of it.
+This script has been designed to support SOC, Red Team & CTF players in finding some basic ways for privilege escalation. The script should be used in safe environment. The author IS NOT responsible for any kind of misuse of it.
 
 Message: If you find new ways in privilega escalation and is not listed in our script, please feel free to share your experience.
 
