@@ -3848,7 +3848,7 @@ echo -e "\n${BLUE}╔═════{ MySQL Version:${XX}"
         echo -e "\t║    https://www.trenchesofit.com/2021/02/15/offensive-security-proving-grounds-banzai-write-up-no-metasploit/ ║"
         echo -e "\t╚══════════════════════════════════════════════════════════════════════════════════════════════════════════════╝"
 echo -e "\n${BLUE}╔═════{ Is mysql service running as root:${XX}"
-    ps -aux | grep mysql 2>/dev/null --color=always
+    ps -aux | grep root | grep mysql 2>/dev/null --color=always
         echo -e "\t╔══════════════════════════════════════════════════════════════════════════════════════════════════════════════╗"
         echo -e "\t║${RED}If so${XX}, escalate privilege root via user defined database functions (UDFs)                                     ║"
         echo -e "\t║    hthttps://steflan-security.com/linux-privilege-escalation-exploiting-user-defined-functions/              ║"
@@ -4099,7 +4099,8 @@ echo -e "\n${BLUE}    ══{ ping:${XX}"
     fi
     echo -e "\n"
     read -p "    ══{ Do you want to scan target network using 'for loop'? [Y/N]:" input
-        if [[ $input == "Y" || $input == "y" ]]; then
+        if [[ $input == "Y" || $input == "y" ]]; 
+        then
             read -p "Enter 1st octic : " O1
             read -p "Enter 2nd octic : " O2
             read -p "Enter 3rd octic : " O3
