@@ -3679,7 +3679,7 @@ echo -e "\n${BLUE}╔═════{ ssh_config File:${XX}"
             echo -e "\n${BLUE}    ══{ Max Sessions Allowed 'defaults is 10':${XX}"
                 cat /etc/ssh/ssh_config | grep MaxSession
             echo -e "\n${BLUE}    ══{ Is HashKnownHosts Enable:${XX}"
-                cat /etc/ssh/ssh_config | grep HashKnownHosts
+                cat /etc/ssh/ssh_config | grep "HashKnownHosts" --color=always
                 echo -e "\t╔════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╗"
                 echo -e "\t║If no, then we can read the content of ~/.ssh/known_hosts and try to break the hash.                                ║"
                 echo -e "\t║    https://github.com/chris408/known_hosts-hashcat                                                                 ║"
