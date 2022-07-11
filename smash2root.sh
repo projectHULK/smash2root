@@ -121,9 +121,9 @@ echo -e "\n${BLUE}╔═════{ which users have recently used sudo:${XX}"
             echo -e "${RED}	Permission Denied${XX}"
     fi
 echo -e "\n${BLUE}╔═════{ User ID:${XX}"
-    id
+    id | grep "root\|$"
 echo -e "\n${BLUE}╔═════{ User Groups:${XX}"
-    groups
+    groups | grep "root\|$"
         echo -e "\t╔════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╗"
         echo -e "\t║Sometimes, the user may be a part of a vulnerable group such as: lxd/lxc,Docker, Wheel, Shadow, Disk, Video, etc.   ║"
         echo -e "\t║Every group worths Googling for exploit.                                                                            ║"
@@ -135,7 +135,7 @@ echo -e "\n${BLUE}╔═════{ Are we in Docker:${XX}"
         echo -e "\t║    mkdir /hdd && mount /dev/sda1 /hdd && chroot /hdd                                                               ║"
         echo -e "\t╚════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╝"
 echo -e "\n${BLUE}╔═════{ User ID & Groups possible escap:${XX}"
-    id | grep --color=always -i "docker\|lxd\|auth\|lpadmin\|adm\|sudo\|video\|disk\|disk\|shadow\|fail2ban\|sambashare" 2>/dev/null
+    id | grep --color=always -i "docker\|lxd\|auth\|lpadmin\|adm\|sudo\|video\|disk\|disk\|shadow\|fail2ban\|sambashare\|root" 2>/dev/null
         echo -e "\t╔════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╗"
         echo -e "\t║Docker:                                                                                                             ║"
         echo -e "\t║Run:                                                                                                                ║"
