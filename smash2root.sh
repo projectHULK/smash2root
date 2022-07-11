@@ -3442,7 +3442,7 @@ echo -e "\n${BLUE}    ══{ Is the .bashrc file writable?${XX}"
         echo -e "\t║started from an existing login session.                                                                             ║"
         echo -e "\t╚════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╝"
 echo -e "\n${BLUE}    ══{ Is the .bash_profile file writable?${XX}"
-    locate .bash_profile | xargs ls -la --color=always
+    locate .bash_profile | xargs ls -lad
         echo -e "\t╔════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╗"
         echo -e "\t║The ~/.bash_profile file is a configuration file for configuring user environments. The users can modify the default║"
         echo -e "\t║settings and add any extra configurations in it.                                                                    ║"
@@ -3802,7 +3802,7 @@ echo -e "\n${BLUE}╔═════{ Tmp Directory:${XX}"
 echo -e "\n${BLUE}╔═════{ Backup Directory:${XX}"
     ls -la /var/backups 2>/dev/null && find / -type f  -iname *backup* -o -iname *.bak -o -iname *.bak* -o -iname *.bck -o -iname *.bk -o -iname *.old*  2>/dev/null  | xargs ls -la 2>/dev/null --color=always | grep backup
 echo -e "\n${BLUE}╔═════{ .bak Files:${XX}"
-    find / -iname *.bak -type f 2>/dev/null 2>/dev/null
+    find / -iname *.bak -type f 2>/dev/null | grep --color "pass\|flag\|cred\|key\|hash\|shadow\|$"
         echo -e "\t╔══════════════════════════════════════════════════════════════════════════════════════════════════════════════╗"
         echo -e "\t║Explore any interesting backup filename.                                                                      ║"
         echo -e "\t╚══════════════════════════════════════════════════════════════════════════════════════════════════════════════╝"
@@ -3984,7 +3984,7 @@ echo -e "\n${BLUE}╔═════{ PHP Files 'Excluded /usr/ | /opt/':${XX}"
 echo -e "\n${BLUE}╔═════{ Grep hardcoded passwords in *.php files:${XX}"
     find / -name "*.php" -print0 2>/dev/null | xargs -0 grep -i -n "var "$"password" --color=always
 echo -e "\n${BLUE}╔═════{ Text Files:${XX}"
-    find / -iname *.txt -type f 2>/dev/null | xargs ls -la 2>/dev/null | grep -v "/usr/\|/opt/\|/lib/\|/etc/"
+    find / -iname *.txt -type f 2>/dev/null | xargs ls -la 2>/dev/null | grep -v "/usr/\|/opt/\|/lib/\|/etc/" | grep --color "pass\|flag\|cred\|key\|hash\|shadow\|$"
         echo -e "\t╔═══════════════════════════════════════════════════════════════════════════════╗"
         echo -e "\t║smach2root search has excluded the following directory:-                       ║"
         echo -e "\t║  /usr/*       |  /opt/       |  /etc/                                         ║"
