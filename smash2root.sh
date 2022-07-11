@@ -75,7 +75,7 @@ echo -e "\n${BLUE}╔═════{ Current Privilege is?${XX}"
                 exit 1
             fi
         else
-            echo -e "\tNormal User, too bad :(... " >&2
+            echo -e "\t${RED}Normal User${XX}" >&2
             echo -e "\tTry hard to escalate :D "
             sleep 2
     fi
@@ -222,8 +222,6 @@ echo -e "\n"
         echo -e "\t║If an -x- is representing the password field, this indicates that the password is encrypted.                        ║"
         echo -e "\t╚════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╝"
 echo -e "\n${BLUE}╔═════{ Password file:${XX}"
-    ls -la /etc/passwd --color=always
-echo -e "\n${BLUE}╔═════{ Password in history files:${XX}"
 echo -e "\n${BLUE}    ══{ .bash_history${XX}"
     if [ -f ~/.bash_history ]; 
         then
@@ -242,7 +240,9 @@ echo -e "\n${BLUE}    ══{ .zsh_history${XX}"
         echo -e "\t║The bash_history file is used to store the command history of a particular user. The bash_history file can be       ║"
         echo -e "\t║configured in the .bashrc configuration file that is stored in the home directory of a user.                        ║"
         echo -e "\t╚════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╝"
-echo -e "\n${BLUE}    ══{ Is Password file Writable?${XX}"
+echo -e "\n${BLUE}    ══{ /etc/passwd:${XX}"
+    ls -la /etc/passwd --color=always
+echo -e "\n${BLUE}    ══{ Is /etc/passwd Writable?${XX}"
     passwd=/etc/passwd
     [ $# -eq 0 ]
         if [ -w "$passwd" ] 
@@ -264,7 +264,7 @@ echo -e "\n${BLUE}    ══{ Is Password file Writable?${XX}"
         else
         echo -e "${RED}	Permission Denied${XX}"
         fi
-echo -e "\n${BLUE}    ══{ Reading Password File:${XX}"
+echo -e "\n${BLUE}    ══{ Reading /etc/passwd File:${XX}"
     if [ -r /etc/passwd ];
     then
         cat /etc/passwd | grep -E ":0:0:|$"
@@ -275,7 +275,7 @@ echo -e "\n${BLUE}    ══{ Reading Password File:${XX}"
         echo -e "\t║All linux systems will print this information, our aim is to find hash value to be cracked or write permission to   ║"
         echo -e "\t║missuse it.                                                                                                         ║"
         echo -e "\t╚════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╝"
-echo -e "\n${BLUE}    ══{ Hash in Password file:${XX}"
+echo -e "\n${BLUE}    ══{ Hash in /etc/passwd file:${XX}"
     grep  -v 'x' /etc/passwd
         echo -e "\t╔════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╗"
         echo -e "\t║If any hash is found in the /etc/passwd, the attacker my try to crack it by using any hash cracker software or tool ║"
@@ -383,13 +383,11 @@ echo -e "\n${BLUE}╔═════{ Find 'Pass, Hash, Cred' as a file name:${X
         echo -e  "\t╔════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╗"
         echo -e  "\t║Excluded: /usr/ | /var/ | /opt/ | /sys/                                                                             ║"
         echo -e  "\t╚════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╝"
-echo -e "\n${BLUE}╔═════{ Bash History Files:${XX}"
-    find / -iname *_history -xdev 2>/dev/null | xargs ls -ld
 echo -e "\n${BLUE}╔═════{ Curent User Bash History:${XX}"
-echo -e "\n${BLUE}    ══{ .bash_history:${XX}"
+    find / -iname *_history -xdev 2>/dev/null | xargs ls -ld
+echo -e "\n${BLUE}    ══{ Reading last 100 User .bash_history:${XX}"
         if [ -f /home/$USER/.bash_history ]; 
             then
-                echo -e "\n${BLUE}    ══{ Reading last 100 User Bash History:${XX}"
                 tail -n 100 /home/$USER/.bash_history 2>/dev/null
                     echo -e  "\t╔════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╗"
                     echo -e  "\t║If you want to read the whole file do: cat ~/.bash_history                                                          ║"
@@ -397,10 +395,9 @@ echo -e "\n${BLUE}    ══{ .bash_history:${XX}"
             else
                 echo -e "${RED}	File does not exist${XX}"
         fi
-echo -e "\n${BLUE}    ══{ .zsh_history:${XX}"
+echo -e "\n${BLUE}    ══{ Reading last 100 User .zsh_history:${XX}"
         if [ -f /home/$USER/.zsh_history ]; 
             then
-                echo -e "\n${BLUE}    ══{ Reading last 100 User Bash History:${XX}"
                 tail -n 100 /home/$USER/.zsh_history 2>/dev/null
                     echo -e  "\t╔════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╗"
                     echo -e  "\t║If you want to read the whole file do: cat ~/.zsh_history                                                           ║"
@@ -3131,7 +3128,7 @@ EOF
             echo
     done
 echo -e "\n${BLUE}╔═════{ System Release:${XX}"
-    cat /etc/*-release 2>/dev/null
+    cat /etc/*-release 2>/dev/null | grep -i "DISTRIB_ID=\|DISTRIB_RELEASE=\|DISTRIB_DESCRIPTION=\|VERSION=\|$"
 echo -e "\n${BLUE}╔═════{ lsb Release:${XX}"
     lsb_release
 echo -e "\n${BLUE}╔═════{ Host name:${XX}"
@@ -3246,7 +3243,7 @@ echo -e "\n${BLUE}╔═════{ Total number of installed packages:${XX}"
 echo -e "\n${BLUE}╔═════{ Is Ansible Installed on the system:${XX}"
     if [ -d /etc/ansible/ ]; 
         then
-                echo -e "\t Yes"
+                echo -e "\t ${RED}Yes${XX}"
                 echo -e "\t╔════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╗"
                 echo -e "\t║Ansible is an infrastructure configuration engine that enables IT personnel to dynamically and automatically        ║"
                 echo -e "\t║configure IT infrastructure and computing resources. It works through a “push” model where the Ansible controller   ║"
@@ -3436,7 +3433,21 @@ echo -e "\n${BLUE}╔═════{ Profile.d files:${XX}"
         echo -e "\t╚════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╝"
 echo -e "\n${BLUE}╔═════{ User Configuration Files${XX}"
 echo -e "\n${BLUE}    ══{ Is the .bashrc file writable?${XX}"
-    locate .bashrc | xargs ls -la --color=always
+    bachrc=/home/$USER/.bashrc
+        [ $# -eq 0 ]
+        if [ -w "$bachrc" ] 
+            then
+                ls -la /home/$USER/.bashrc
+                echo -e "${GREEN}   Permission is Granted${XX}"
+                echo -e "\t╔════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╗"
+                echo -e "\t║Does the writeable file belongs to root or user?                                                                    ║"
+                echo -e "\t╚════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╝"
+            else
+                ls -la /home/$USER/.bashrc
+                echo -e "${RED} Permission Denied${XX}"
+        fi
+echo -e "\n${BLUE}    ══{ Other .bashrc files:${XX}"
+    locate .bashrc 2>/dev/null | xargs ls -la
         echo -e "\t╔════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╗"
         echo -e "\t║Is executed when a new terminal window is opened from an existing login session or when a new shell instance is     ║"
         echo -e "\t║started from an existing login session.                                                                             ║"
