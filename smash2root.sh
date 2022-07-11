@@ -29,7 +29,7 @@ echo -e "
         ▀▀▀██████████████████████▀▀▀         ╚═══██╗██║╚██╔╝██║██╔══██║ ╚═══██╗██╔══██║     ██╔══╝       ██╔══██╗██║  ██║██║  ██║   ██║
                                             ██████╔╝██║ ╚═╝ ██║██║  ██║██████╔╝██║  ██║     ███████╗     ██║  ██║╚█████╔╝╚█████╔╝   ██║
            █                  █             ╚═════╝ ╚═╝     ╚═╝╚═╝  ╚═╝╚═════╝ ╚═╝  ╚═╝     ╚══════╝     ╚═╝  ╚═╝ ╚════╝  ╚════╝    ╚═╝
-            █    ██▀▀▀▀██    █              ═════════════════════════════════════════════════════════{Privilege Escalation Script v3.5}
+            █    ██▀▀▀▀██    █              ═════════════════════════════════════════════════════════{Privilege Escalation Script v3.6}
              █  ▀        ▀  █
               ██▄████████▄██
                 ▀████████▀
@@ -229,14 +229,14 @@ echo -e "\n${BLUE}    ══{ .bash_history${XX}"
         then
             cat ~/.bash_history | grep "pass" 2>/dev/null
         else
-            echo -e "  ${RED}File does not exist${XX}"
+            echo -e "${RED}	File does not exist${XX}"
     fi
 echo -e "\n${BLUE}    ══{ .zsh_history${XX}"
     if [ -f ~/.zsh_history ]; 
         then
             cat ~/.zsh_history | grep "pass" 2>/dev/null
         else
-            echo -e "  ${RED}File does not exist${XX}"
+            echo -e "${RED}	File does not exist${XX}"
     fi
         echo -e "\t╔════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╗"
         echo -e "\t║The bash_history file is used to store the command history of a particular user. The bash_history file can be       ║"
@@ -3525,42 +3525,42 @@ echo -e "\n${BLUE}    ══{ at.allow:${XX}"
         then
 		    cat /etc/at.allow 2>/dev/null
         else
-            echo -e "  ${RED}File does not exist${XX}"
+            echo -e "${RED}	File does not exist${XX}"
     fi
 echo -e "\n${BLUE}    ══{ at.deny:${XX}"
     if [ -f /etc/at.deny ]; 
         then
 		    cat /etc/at.deny 2>/dev/null
         else
-            echo -e "  ${RED}File does not exist${XX}"
+            echo -e "${RED}	File does not exist${XX}"
     fi
 echo -e "\n${BLUE}    ══{ cron.allow:${XX}"
     if [ -f /etc/cron.allow ]; 
         then
 		    cat /etc/cron.allow 2>/dev/null
         else
-            echo -e "  ${RED}File does not exist${XX}"
+            echo -e "${RED}	File does not exist${XX}"
     fi
 echo -e "\n${BLUE}    ══{ cron.deny:${XX}"
     if [ -f /etc/cron.deny ]; 
         then
 		    cat /etc/cron.deny 2>/dev/null
         else
-            echo -e "  ${RED}File does not exist${XX}"
+            echo -e "${RED}	File does not exist${XX}"
     fi
 echo -e "\n${BLUE}    ══{ cron.deny:${XX}"
     if [ -f /etc/cron.deny ]; 
         then
 		    cat /etc/cron.deny 2>/dev/null
         else
-            echo -e "  ${RED}File does not exist${XX}"
+            echo -e "${RED}	File does not exist${XX}"
     fi
 echo -e "\n${BLUE}    ══{ Anacrontab:${XX}"
     if [ -f /etc/anacrontab ]; 
         then
 		    cat /etc/anacrontab 2>/dev/null
         else
-            echo -e "  ${RED}File does not exist${XX}"
+            echo -e "${RED}	File does not exist${XX}"
     fi
 echo -e "\n${BLUE}    ══{ Find World-Writable Cron jobs:${XX}"
     find /etc/cron* -type f -perm -o+w -exec ls -l {} \; 2>/dev/null
@@ -3638,10 +3638,10 @@ echo -e "\n${BLUE}╔═════{ SSH is configured for Public Key Authentic
     if [ -f /etc/ssh/sshd_config ]; 
 	    then
     	    cat /etc/ssh/sshd_config | grep 'PubkeyAuthentication' --color=always 
-        echo -e "\t╔════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╗"
-        echo -e "\t║is a method in which you generate and store on your computer a pair of cryptographic keys and then configure your   ║"
-        echo -e "\t║server to recognize and accept your keys. A private key, usually named id_rsa, A public key, named id_rsa.pub       ║"
-        echo -e "\t╚════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╝"
+            echo -e "\t╔════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╗"
+            echo -e "\t║is a method in which you generate and store on your computer a pair of cryptographic keys and then configure your   ║"
+            echo -e "\t║server to recognize and accept your keys. A private key, usually named id_rsa, A public key, named id_rsa.pub       ║"
+            echo -e "\t╚════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╝"
         else
      		echo -e "${RED}	File does not exist${XX}"
     fi
@@ -3791,7 +3791,7 @@ echo -e "\n${BLUE}╔═════{ Reading Mail File:${XX}"
         then
 		    cat /var/mail/* 2>/dev/null
         else
-            echo -e "  ${RED}File does not exist${XX}"
+            echo -e "${RED}	File does not exist${XX}"
     fi   
 echo -e "\n${BLUE}╔═════{ List Root Directory:${XX}"
     ls -la /root/
