@@ -3194,7 +3194,32 @@ echo -e "\n${BLUE}╔═════{ ASLR Settings:${XX}"
 echo -e "\n${BLUE}╔═════{ ASLR Address Space:${XX}"
     ldd /bin/bash
 echo -e "\n${BLUE}╔═════{ SELinux status:${XX}"
-    sestatus 2>/dev/null
+    if [ -f /etc/selinux ]; 
+        then
+            echo -e "\n${BLUE}    ══{ SELinuxfs mount:${XX}"
+            ls -l /sys/fs/selinux
+            echo -e "\n${BLUE}    ══{ Status:${XX}"
+            sestatus 2>/dev/null
+            echo -e "\n${BLUE}    ══{ Version:${XX}"
+            sestatus -v 2>/dev/null
+            echo -e "\n${BLUE}    ══{ Root Directory:${XX}"
+            ls -l /etc/selinux 2>/dev/null
+            echo -e "\n${BLUE}    ══{ Default Setup:${XX}"
+            cat /etc/sestatus.conf 2>/dev/null
+            echo -e "\n${BLUE}    ══{ Boolean Values:${XX}"
+            sestatus -b | more 2>/dev/null
+                echo -e "\t╔══════════════════════════════════════════════════════════════════════════════════════════════╗"
+                echo -e "\t║What is SELinux?                                                                              ║"
+                echo -e "\t║Security-Enhanced Linux (SELinux) is a security architecture for Linux® systems that allows   ║"
+                echo -e "\t║administrators to have more control over who can access the system. It was originally         ║"
+                echo -e "\t║developed by the United States National Security Agency (NSA) as a series of patches to the   ║"
+                echo -e "\t║Linux kernel using Linux Security Modules(LSM).                                               ║"
+                echo -e "\t║Read more:                                                                                    ║"
+                echo -e "\t║    https://www.redhat.com/en/topics/linux/what-is-selinux                                    ║"
+                echo -e "\t╚══════════════════════════════════════════════════════════════════════════════════════════════╝"
+        else
+            echo -e "${RED}	SELinux does not exist${XX}"
+    fi
 echo -e "\n${BLUE}╔═════{ Abusing systemctl:${XX}"
         echo -e "\t╔══════════════════════════════════════════════════════════════════════════════════════════════╗"
         echo -e "\t║Create NewRCE.service and write:                                                              ║"
