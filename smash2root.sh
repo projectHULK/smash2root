@@ -87,9 +87,13 @@ echo -e "\n${BLUE}╔═════{ Sudo privileged access:${XX}"
         echo -e "\t║Incase you have the password, run: sudo -l and find a way to exploit the file.                                      ║"
         echo -e "\t╚════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╝"
 echo -e "\n${BLUE}╔═════{ Who's logged in:${XX}"
+    who
+echo -e "\n${BLUE}╔═════{ What other users are doing:${XX}"
     w
-echo -e "\n${BLUE}╔═════{ Login History:${XX}"
+echo -e "\n${BLUE}╔═════{ Users Loggedon History:${XX}"
     last -Faiw | last | grep still --color=always
+echo -e "\n${BLUE}╔═════{ Users Still Loggedon:${XX}"
+    last
 echo -e "\n${BLUE}╔═════{ Last Log In:${XX}"
     lastlog | grep -v "**Never logged in**" 
 echo -e "\n${BLUE}╔═════{ Root Users:${XX}"
@@ -3127,6 +3131,8 @@ EOF
             fi
             echo
     done
+echo -e "\n${BLUE}╔═════{ List System Release:${XX}"
+    ls /etc/*-release
 echo -e "\n${BLUE}╔═════{ System Release:${XX}"
     cat /etc/*-release 2>/dev/null | grep -i "DISTRIB_ID=\|DISTRIB_RELEASE=\|DISTRIB_DESCRIPTION=\|VERSION=\|$"
 echo -e "\n${BLUE}╔═════{ lsb Release:${XX}"
