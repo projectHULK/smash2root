@@ -3182,6 +3182,10 @@ echo -e "\n${BLUE}╔═════{ Linux File System Information:${XX}"
         echo -e "\t╚════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╝"
 echo -e "\n${BLUE}╔═════{ List of running services:${XX}"
     service --status-all
+        echo -e "\t╔════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╗"
+        echo -e "\t║Run the following command to see whats running under systemctl:                                                     ║"
+        echo -e "\t║    systemctl list-units --type=service --all                                                                       ║"
+        echo -e "\t╚════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╝"
 echo -e "\n${BLUE}╔═════{ File-systems mounted:${XX}"
     df -h 2>/dev/null
 echo -e "\n${BLUE}╔═════{ Unmounted file-systems:${XX}"
@@ -3748,6 +3752,8 @@ echo -e "\n${BLUE}╔═════{ Any active SSH session:${XX}"
         echo -e "\t╔════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╗"
         echo -e "\t║If any session is found, the session can be hijacked. Read more about SSH session hijacking:                        ║"
         echo -e "\t║    https://xorl.wordpress.com/2018/02/04/ssh-hijacking-for-lateral-movement/                                       ║"
+        echo -e "\t║If any session is found, you can also use strace -p pid to spy on the child sshd process:                           ║"
+        echo -e "\t║    Ex: sudo strace -p 8408                                                                                         ║"
         echo -e "\t╚════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╝"
 echo -e "\n${BLUE}╔═════{ Active SSH Session ID:${XX}"
     pstree -p $USER | grep ssh
@@ -4153,9 +4159,9 @@ echo -e "\n${BLUE}    ══{ ping:${XX}"
     read -p "    ══{ Do you want to scan target network using 'for loop'? [Y/N]:" input
         if [[ $input == "Y" || $input == "y" ]]; 
         then
-            read -p "Enter 1st octic : " O1
+            read -p "Enter 1st octic : " O1
             read -p "Enter 2nd octic : " O2
-            read -p "Enter 3rd octic : " O3
+            read -p "Enter 3rd octic : " O3
             echo -e "\t╔════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╗"
             echo -e "\t║This will scan all 255 IPs, and may take time based on the network range, please be patient. This will run normal   ║"
             echo -e "\t║for loop in our case.                                                                                               ║"
