@@ -3658,11 +3658,14 @@ sleep 2
 echo -e "\n${BLUE}╔═════{ SSH is configured for Public Key Authentication:${XX}"
     if [ -f /etc/ssh/sshd_config ]; 
 	    then
+        echo -e "\n${BLUE}    ══{ PubkeyAuthentication:${XX}"
     	    cat /etc/ssh/sshd_config | grep 'PubkeyAuthentication' --color=always 
             echo -e "\t╔════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╗"
             echo -e "\t║is a method in which you generate and store on your computer a pair of cryptographic keys and then configure your   ║"
             echo -e "\t║server to recognize and accept your keys. A private key, usually named id_rsa, A public key, named id_rsa.pub       ║"
             echo -e "\t╚════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╝"
+        echo -e "\n${BLUE}    ══{ Allowed Users :${XX}"
+            cat /etc/ssh/sshd_config | grep 'AllowUsers' --color=always 
         else
      		echo -e "${RED}	File does not exist${XX}"
     fi
