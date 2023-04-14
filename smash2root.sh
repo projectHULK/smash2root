@@ -3503,6 +3503,8 @@ echo -e "\n${BLUE}╔═════{ Process binaries and associated permission
 echo -e "\n${BLUE}╔═════{ Is tmux installed:${XX}"
     if command -v tmux >/dev/null 2>&1; then
         echo -e "${GREEN}    tmux is installed${XX}"
+        echo -e "\n${BLUE}    ══{ Tmux version:${XX}"
+        tmux -V
         echo -e "\n${BLUE}    ══{ Is tmux Running as root:${XX}"
         tmux_pid=$(pgrep -f tmux -o)
         if [ -z "$tmux_pid" ]; then
@@ -3694,6 +3696,11 @@ echo -e "\n${BLUE}╔═════{ Outbound port connectivity:${XX}"
         else
             echo -e "${RED}	Testing was unsuccessful${XX}"
         fi
+echo -e "\n${BLUE}╔═════{ Can we snif with tcpdump:${XX}"
+    if ! command -v tcpdump &> /dev/null; then
+        echo "You need to install tcpdump to use it"
+    fi
+    echo "You can sniff with tcpdump"
 echo -e "\n\n${RED}\t\tEnumeration on progress ╔═══════════════════════════════════(80%)═════════════════....................${XX}\n"
 echo -e "${RED} \t\t╔════════════════════════════════════════════════════════════════════════════════════════════════════════╗${XX}"
 echo -e "${RED} \t\t ═══════════════════════════════════════════[ Finding SSH Keys ]═════════════════════════════════════════ ${XX}"
@@ -4155,7 +4162,7 @@ echo -e "\n${BLUE}╔═════{ Current user trash files:${XX}"
                 echo -e "\t║Have a look at the trash files and see if you can find any useful information.              ║"
                 echo -e "\t╚════════════════════════════════════════════════════════════════════════════════════════════╝"
         else
-            echo -e "${RED}	Trash is Empty${XX}"
+            echo -e "${RED}	Trash is Empty or file does not exist${XX}"
     fi
 echo -e "\n${BLUE}╔═════{ Wireshark files:${XX}"
     find / -name '*.pcapng' -o -name *.libpcap -type f 2>/dev/null | grep -v "/usr/"
