@@ -4016,12 +4016,6 @@ echo -e "\n${BLUE}╔═════{ Log File:${XX}"
 echo -e "\n${BLUE}╔═════{ /var/www/ files:${XX}"
     ls -la /var/www --color=always 2>/dev/null
 echo -e "\n${BLUE}╔═════{ Any settings/files (hidden) on website? Any settings file with database information?${XX}"
-echo -e "\n${BLUE}    ══{ /var/www/:${XX}"
-    if [ -f /var/www/ ]; then
-		ls -alhR /var/www/ 2>/dev/null
-    else
-        echo -e "${RED}	File does not exist${XX}"
-    fi
 echo -e "\n${BLUE}    ══{ htdocs:${XX}"
     if [ -f /srv/www/htdocs/ ]; then
 	    ls -alhR /srv/www/htdocs/ 2>/dev/null
@@ -4257,9 +4251,9 @@ echo -e "\n${BLUE}    ══{ ping:${XX}"
             echo -e "\t╔════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╗"
             echo -e "\t║Please have a look at the host network & findout if there is any device that you may pivite to. You can do it by any║"
             echo -e "\t║of the following loop commands:                                                                                     ║"
-            echo -e '\t║    for ip in $(seq 1 255); do ping -c 1 A.B.C.$ip | grep "bytes from"; done                                        ║'
-            echo -e '\t║    for i in {1..255}; do ping -c 1 A.B.C.$i | grep "bytes from"; done                                              ║'
-            echo -e '\t║    for i in {1..255}; do (ping A.B.C.$i -c 1 -w 1  >/dev/null && echo -e "Host with IP $i Is Alive"); done         ║'
+            echo -e '\t║    for ip in $(seq 1 255); do ping -c 1 -w 1 A.B.C.$ip | grep "bytes from"; done                                   ║'
+            echo -e '\t║    for ip in {1..255}; do ping -c 1 -w 1 A.B.C.$i | grep "bytes from"; done                                        ║'
+            echo -e '\t║    for ip in {1..255}; do (ping A.B.C.$i -c 1 -w 1  >/dev/null && echo -e "Host with IP A.B.C.$i Is Alive"); done  ║'
             echo -e "\t╚════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╝"
         fi
 echo -e "\n\n${RED}\t\tEnumeration is completed ╔═══════════════════════════════════(100%)═══════════════════════════════════╗${XX}\n\n"
