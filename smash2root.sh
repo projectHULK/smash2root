@@ -4209,32 +4209,38 @@ echo -e "\n${BLUE}╔═════{ Pivoting:${XX}"
     echo -e "\t╚════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╝"
 echo -e "\n${BLUE}╔═════{ Usefull tools for network scanning:${XX}"
 echo -e "\n${BLUE}    ══{ Nmap:${XX}"
-    if [ -f /usr/bin/nmap ];
-        then
-            echo "  Nmap is installed on the system, use it to scan the host network"
-        else
-            echo -e "  Nmap is not installed"
+    if command -v nmap >/dev/null 2>&1; then
+        echo "  Nmap is installed on the system, use it to scan the host network"
+    else
+        echo -e "  Nmap is not installed"
+        echo -e "  Download from: https://github.com/ernw/static-toolbox/releases"
     fi
 echo -e "\n${BLUE}    ══{ Netcat:${XX}"
-    if [ -f /usr/bin/nc ];
-        then
-            echo "  Netcat is installed on the system, use it to scan the host network"
-        else
-            echo -e "  Netcat is not installed"
+    if command -v cn >/dev/null 2>&1; then
+        echo "  Netcat is installed on the system, use it to scan the host network"
+    else
+        echo -e "  Netcat is not installed"
+        echo -e "  Download from: https://github.com/ernw/static-toolbox/releases"
     fi
 echo -e "\n${BLUE}    ══{ fping:${XX}"
-    if [ -f /usr/bin/fping ];
-        then
-            echo "  fping is installed on the system, use it to scan the host network"
-        else
-            echo -e "  fping is not installed"
+    if command -v fping >/dev/null 2>&1; then
+        echo "  fping is installed on the system, use it to scan the host network"
+    else
+        echo -e "  fping is not installed"
+        echo -e "  Download from: https://github.com/ernw/static-toolbox/releases"
     fi
 echo -e "\n${BLUE}    ══{ ping:${XX}"
-    if [ -f /usr/bin/ping ];
-        then
-            echo "  ping is installed on the system, use it to scan the host network"
-        else
-            echo -e "  ping is not installed"
+    if command -v ping >/dev/null 2>&1; then
+        echo "  ping is installed on the system, use it to scan the host network"
+    else
+        echo -e "  ping is not installed"
+        echo -e "  Download from: https://github.com/ernw/static-toolbox/releases"
+    fi
+echo -e "\n${BLUE}    ══{ masscan:${XX}"
+    if command -v masscan >/dev/null 2>&1; then
+        echo "  masscan is installed on the system, use it to scan the host network"
+    else
+        echo -e "  masscan is not installed"
     fi
     echo -e "\n"
     read -p "    ══{ Do you want to scan target network using 'for loop'? [Y/N]:" input
